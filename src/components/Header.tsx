@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { Search, ShoppingBag, X } from "lucide-react";
 
 interface HeaderProps {
@@ -22,7 +23,17 @@ export default function Header({
   return (
     <header className="site-header">
       <div className="container header-inner">
-        <div className="wordmark">THE BOOKWORM</div>
+        <div className="wordmark" style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <Image
+            src="/logo.png"
+            alt="The Bookworm Mascot Logo"
+            width={32}
+            height={32}
+            priority
+            style={{ width: 32, height: "auto", display: "block" }}
+          />
+          <span>THE BOOKWORM</span>
+        </div>
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
           <button
             className="icon-circle"

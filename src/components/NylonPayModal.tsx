@@ -105,7 +105,7 @@ export default function NylonPayModal({
         }
       }, 3000);
 
-    } catch (e: any) {
+    } catch {
       setPhoneError("Network error. Please try again.");
       setStep("form");
     }

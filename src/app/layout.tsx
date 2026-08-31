@@ -10,15 +10,36 @@ const manrope = Manrope({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"
+  ),
   title: "The Bookworm — Hand-picked Digital Books",
   description:
     "Browse and buy twelve hand-picked digital books. No subscriptions, no shipping — buy once, download instantly, keep forever.",
   keywords: ["books", "ebooks", "digital books", "buy books online"],
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/favicon-32x32.png", type: "image/png", sizes: "32x32" },
+      { url: "/favicon-16x16.png", type: "image/png", sizes: "16x16" },
+    ],
+    apple: [
+      { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+    ],
+  },
   openGraph: {
     title: "The Bookworm",
     description:
       "Twelve hand-picked digital books. Buy once, keep forever.",
     type: "website",
+    images: [
+      {
+        url: "/logo.png",
+        width: 1024,
+        height: 1024,
+        alt: "The Bookworm Logo",
+      },
+    ],
   },
 };
 

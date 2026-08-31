@@ -37,10 +37,11 @@ export async function GET(request: Request) {
     }
 
     return NextResponse.json({ status: result.value.status });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Nylon Pay Status Error:", error);
+    const message = error instanceof Error ? error.message : "Failed to check status";
     return NextResponse.json(
-      { error: error.message || "Failed to check status" },
+      { error: message },
       { status: 500 }
     );
   }
