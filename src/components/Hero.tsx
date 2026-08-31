@@ -1,64 +1,40 @@
 "use client";
 
-import React from "react";
-
-import { COVER_PALETTES } from "@/data/books";
+import Image from "next/image";
 
 export default function Hero() {
   return (
     <section style={{ maxWidth: 1180, margin: "0 auto", padding: "28px 24px 0" }}>
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "1fr",
-          background: "var(--color-yellow-soft)",
-          borderRadius: 24,
-          overflow: "hidden",
-          padding: "36px 32px",
-        }}
-        className="hero-grid"
-      >
-        <div>
-          <div
-            style={{
-              fontWeight: 600,
-              fontSize: "0.78rem",
-              color: "var(--color-ink-muted)",
-              letterSpacing: "0.03em",
-            }}
-          >
-            NEW
-          </div>
+      <div className="hero-grid">
+        {/* Left: copy */}
+        <div className="hero-copy">
           <h1 className="hero-headline">
-            This month&apos;s
+            Every book you need.
             <br />
-            arrivals
+            All in one place.
           </h1>
           <p className="hero-sub">
-            Twelve books, hand-picked. Buy once, download instantly, keep forever.
+            Essential resources for students, tech
+            enthusiasts, and lifelong learners.
+            <br />
+            Pay per book with MTN or Airtel
+            Mobile Money and download instantly.
           </p>
         </div>
 
-        <div className="hero-books">
-          {([0, 1, 2] as const).map((i) => {
-            const p = COVER_PALETTES[i];
-            const heights = [150, 180, 140];
-            const rotations = [-6, 0, 6];
-            return (
-              <div
-                key={i}
-                style={{
-                  width: 90,
-                  height: heights[i],
-                  background: p.bg,
-                  borderRadius: 14,
-                  transform: `rotate(${rotations[i]}deg)`,
-                  boxShadow: "0 16px 30px -14px rgba(30,30,28,0.35)",
-                  flexShrink: 0,
-                }}
-              ></div>
-            );
-          })}
+        {/* Right: premium logo card */}
+        <div className="hero-logo-wrap">
+          <div className="hero-logo-card">
+            <div className="hero-logo-glow" />
+            <Image
+              src="/bookworm-logo.png"
+              alt="The Bookworm — Books. Resources. Growth."
+              width={320}
+              height={320}
+              priority
+              className="hero-logo-img"
+            />
+          </div>
         </div>
       </div>
     </section>

@@ -148,8 +148,27 @@ export default function Home() {
 
       <footer className="site-footer">
         <div className="container footer-inner">
-          <span>The Bookworm — twelve books, no subscriptions.</span>
-          <span>Files delivered instantly after purchase.</span>
+          <div className="footer-top">
+            <span className="footer-brand-desc">
+              The Bookworm — The digital archive for developers, students, and curious minds.
+            </span>
+            <span className="footer-value-prop">
+              Pay once via Mobile Money &bull; Download instantly &bull; Keep forever.
+            </span>
+          </div>
+          <div className="footer-bottom">
+            <span className="footer-copyright">
+              &copy; 2026 The Bookworm
+            </span>
+            <div className="footer-links">
+              <a href="/terms">Terms of Use</a>
+              <a href="/privacy">Privacy Policy</a>
+              <a href="/disclaimer">Disclaimers</a>
+            </div>
+            <span className="footer-credit">
+              Made by <a href="https://www.linkedin.com/company/renoa-collective/" target="_blank" rel="noopener noreferrer">RENOA</a>
+            </span>
+          </div>
         </div>
       </footer>
 
