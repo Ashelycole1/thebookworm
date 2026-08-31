@@ -45,7 +45,7 @@ export default function NylonPayModal({
     return "";
   }
 
-  function handlePay(e: React.FormEvent) {
+  async function handlePay(e: React.FormEvent) {
     e.preventDefault();
     const err = validatePhone(phone);
     if (err) {
@@ -54,13 +54,51 @@ export default function NylonPayModal({
     }
     setPhoneError("");
     setStep("pending");
-    // Simulate Nylon Pay mobile money prompt (2.5s)
-    setTimeout(() => {
-      setStep("success");
-      setTimeout(() => {
-        onSuccess();
-      }, 2000);
-    }, 2500);
+
+    try {
+      const res = await fetch("/api/checkout/initiate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          amount: Math.round(total * currency.rate),
+          currency: currency.code,
+          phoneNumber: phone,
+        }),
+      });
+      
+      const data = await res.json();
+      if (!res.ok) {
+        setPhoneError(data.error || "Failed to initiate payment");
+        setStep("form");
+        return;
+      }
+
+      // Poll for status every 3 seconds
+      const pollId = setInterval(async () => {
+        try {
+          const statusRes = await fetch(`/api/checkout/status?reference=${data.reference}`);
+          const statusData = await statusRes.json();
+          
+          if (statusData.status === "success") {
+            clearInterval(pollId);
+            setStep("success");
+            setTimeout(() => {
+              onSuccess();
+            }, 2000);
+          } else if (statusData.status === "failed" || statusData.status === "error") {
+            clearInterval(pollId);
+            setPhoneError("Payment failed or was cancelled.");
+            setStep("form");
+          }
+        } catch (err) {
+          console.error("Polling error", err);
+        }
+      }, 3000);
+
+    } catch (e: any) {
+      setPhoneError("Network error. Please try again.");
+      setStep("form");
+    }
   }
 
   return (

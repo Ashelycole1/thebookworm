@@ -12,7 +12,7 @@ const TIMEZONE_CURRENCY_MAP: Record<string, CurrencyConfig> = {
   // Tanzania
   "Africa/Dar_es_Salaam": { code: "TZS", symbol: "TSh", rate: 2650 },
   // Uganda
-  "Africa/Kampala": { code: "UGX", symbol: "USh", rate: 3720 },
+  "Africa/Kampala": { code: "UGX", symbol: "USh", rate: 300 },
   // Rwanda
   "Africa/Kigali": { code: "RWF", symbol: "RF", rate: 1350 },
   // Ethiopia
