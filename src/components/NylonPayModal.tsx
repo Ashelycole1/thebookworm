@@ -24,9 +24,13 @@ export default function NylonPayModal({
   const [phone, setPhone] = useState("");
   const [phoneError, setPhoneError] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
+  const pollRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     inputRef.current?.focus();
+    return () => {
+      if (pollRef.current) clearInterval(pollRef.current);
+    };
   }, []);
 
   useEffect(() => {
@@ -43,6 +47,12 @@ export default function NylonPayModal({
     if (!/^(\+?[\d]{7,15})$/.test(cleaned))
       return "Enter a valid mobile number.";
     return "";
+  }
+
+  function handleCancelPayment() {
+    if (pollRef.current) clearInterval(pollRef.current);
+    setPhoneError("Payment cancelled.");
+    setStep("form");
   }
 
   async function handlePay(e: React.FormEvent) {
@@ -74,20 +84,20 @@ export default function NylonPayModal({
       }
 
       // Poll for status every 3 seconds
-      const pollId = setInterval(async () => {
+      pollRef.current = setInterval(async () => {
         try {
           const statusRes = await fetch(`/api/checkout/status?reference=${data.reference}`);
           const statusData = await statusRes.json();
           
           if (statusData.status === "success") {
-            clearInterval(pollId);
+            if (pollRef.current) clearInterval(pollRef.current);
             setStep("success");
             setTimeout(() => {
               onSuccess();
             }, 2000);
           } else if (statusData.status === "failed" || statusData.status === "error") {
-            clearInterval(pollId);
-            setPhoneError("Payment failed or was cancelled.");
+            if (pollRef.current) clearInterval(pollRef.current);
+            setPhoneError("Payment failed or was cancelled by provider.");
             setStep("form");
           }
         } catch (err) {
@@ -282,6 +292,20 @@ export default function NylonPayModal({
               Check your phone for the payment request and enter your PIN to
               confirm.
             </p>
+            <button
+              onClick={handleCancelPayment}
+              className="meta-label"
+              style={{
+                background: "none",
+                border: "none",
+                color: "var(--color-ink-muted)",
+                marginTop: 24,
+                cursor: "pointer",
+                padding: "8px 16px",
+              }}
+            >
+              CANCEL PAYMENT
+            </button>
           </div>
         )}
 
