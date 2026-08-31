@@ -25,13 +25,6 @@ export default function BookCard({
     <article
       className="book-card"
       onClick={() => onSelect(book)}
-      style={{
-        background: "var(--color-card)",
-        border: "1px solid var(--color-border)",
-        borderRadius: 18,
-        padding: 12,
-        cursor: "pointer",
-      }}
       role="button"
       tabIndex={0}
       aria-label={`View ${book.title} by ${book.author}`}
@@ -47,51 +40,17 @@ export default function BookCard({
         wishlisted={wishlisted}
         onToggleWishlist={onToggleWishlist}
       />
-      <div style={{ marginTop: 12, padding: "0 3px" }}>
-        <div
-          style={
-            {
-              fontWeight: 800,
-              fontSize: "0.85rem",
-              lineHeight: 1.25,
-              textTransform: "uppercase",
-              letterSpacing: "0.01em",
-              display: "-webkit-box",
-              WebkitLineClamp: 2,
-              WebkitBoxOrient: "vertical",
-              overflow: "hidden",
-            } as React.CSSProperties
-          }
-        >
+      <div className="book-card-content">
+        <div className="book-card-title">
           {book.title}
         </div>
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            marginTop: 5,
-          }}
-        >
-          <span
-            style={{
-              color: "var(--color-ink-muted)",
-              fontSize: "0.76rem",
-              fontWeight: 500,
-            }}
-          >
+        <div className="book-card-meta">
+          <span className="book-card-author">
             {book.author}
           </span>
           <Rating value={book.rating} />
         </div>
-        <div
-          style={{
-            fontWeight: 800,
-            fontSize: "0.95rem",
-            color: "var(--color-green)",
-            marginTop: 10,
-          }}
-        >
+        <div className="book-card-price">
           {formatPrice(book.price, currency)}
         </div>
       </div>

@@ -14,7 +14,7 @@ export default function GenreFilter({ active, onChange }: GenreFilterProps) {
       style={{
         maxWidth: 1180,
         margin: "0 auto",
-        padding: "28px 24px 8px",
+        padding: "48px 24px 16px",
       }}
     >
       <div

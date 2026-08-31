@@ -133,7 +133,7 @@ export default function Home() {
           style={{
             maxWidth: 1180,
             margin: "0 auto",
-            padding: "20px 24px 80px",
+            padding: "24px 24px 120px",
           }}
         >
           <BookGrid
