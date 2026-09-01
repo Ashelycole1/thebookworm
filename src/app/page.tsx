@@ -151,15 +151,9 @@ export default function Home() {
 
         <GenreFilter active={genre} onChange={setGenre} />
 
-        <section
-          style={{
-            maxWidth: 1180,
-            margin: "0 auto",
-            padding: "24px 24px 120px",
-          }}
-        >
+        <section className="container section-gap" style={{ paddingBottom: 100 }}>
           {loading ? (
-            <div style={{ textAlign: "center", padding: "40px" }}>Loading books...</div>
+            <div style={{ textAlign: "center", padding: "40px", color: "var(--color-ink-muted)" }}>Loading books...</div>
           ) : (
             <BookGrid
               books={filtered}

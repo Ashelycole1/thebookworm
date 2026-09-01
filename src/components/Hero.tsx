@@ -4,7 +4,7 @@ import Image from "next/image";
 
 export default function Hero() {
   return (
-    <section style={{ maxWidth: 1180, margin: "0 auto", padding: "28px 24px 0" }}>
+    <section className="container hero-section">
       <div className="hero-grid">
         {/* Left: copy */}
         <div className="hero-copy">

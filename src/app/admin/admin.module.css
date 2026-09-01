@@ -1,41 +1,52 @@
 .container {
-  max-width: 860px;
+  max-width: 900px;
   margin: 0 auto;
-  padding: 40px 20px 80px;
+  padding: 24px 16px 60px;
   min-height: 100vh;
 }
 
-/* ── Header ───────────────────────────────── */
+@media (min-width: 640px) {
+  .container { padding: 32px 24px 80px; }
+}
+
+@media (min-width: 960px) {
+  .container { padding: 48px 24px 80px; }
+}
+
+/* ── Header ────────────────────────────── */
 .header {
-  margin-bottom: 28px;
+  margin-bottom: 20px;
   text-align: center;
 }
 .title {
-  font-size: 2.2rem;
+  font-size: clamp(1.5rem, 5vw, 2.2rem);
   color: var(--color-ink);
   margin-bottom: 6px;
 }
 .subtitle {
   color: var(--color-ink-muted);
-  font-size: 1rem;
+  font-size: clamp(0.88rem, 3vw, 1rem);
 }
 
-/* ── Tabs ─────────────────────────────────── */
+/* ── Tabs ────────────────────────────── */
 .tabs {
   display: flex;
-  gap: 8px;
-  margin-bottom: 24px;
+  gap: 4px;
+  margin-bottom: 20px;
   border-bottom: 2px solid var(--color-border);
   padding-bottom: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
 }
+.tabs::-webkit-scrollbar { display: none; }
 .tab {
   display: flex;
   align-items: center;
   gap: 6px;
-  padding: 10px 20px;
+  padding: 9px 16px;
   border: none;
   background: none;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   font-weight: 600;
   color: var(--color-ink-muted);
   cursor: pointer;
@@ -43,6 +54,7 @@
   margin-bottom: -2px;
   transition: color 0.2s, border-color 0.2s;
   font-family: inherit;
+  white-space: nowrap;
 }
 .tab:hover {
   color: var(--color-ink);
@@ -106,7 +118,7 @@
   grid-template-columns: 1fr 1fr;
   gap: 16px;
 }
-@media (max-width: 560px) {
+@media (max-width: 480px) {
   .formRow { grid-template-columns: 1fr; }
 }
 
@@ -167,7 +179,7 @@
   grid-template-columns: 1fr 1fr;
   gap: 16px;
 }
-@media (max-width: 560px) {
+@media (max-width: 480px) {
   .fileRow { grid-template-columns: 1fr; }
 }
 .fileInputWrapper {
@@ -264,28 +276,35 @@
 .bookList {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
 }
 .bookRow {
   display: flex;
   align-items: flex-start;
-  gap: 14px;
-  padding: 14px;
+  gap: 10px;
+  padding: 12px;
   border: 1px solid var(--color-border);
   border-radius: 10px;
   background: var(--color-card-alt);
   transition: opacity 0.2s;
 }
+@media (min-width: 640px) {
+  .bookRow { gap: 14px; padding: 14px; }
+}
 .bookRowDisabled {
   opacity: 0.5;
 }
 .bookThumb {
-  width: 52px;
-  height: 72px;
+  width: 46px;
+  height: 64px;
   flex-shrink: 0;
   border-radius: 6px;
   overflow: hidden;
   background: var(--color-border);
+  position: relative;
+}
+@media (min-width: 640px) {
+  .bookThumb { width: 52px; height: 72px; }
 }
 .bookThumb img {
   width: 100%;
@@ -307,9 +326,13 @@
 }
 .bookTitle {
   font-weight: 700;
-  font-size: 0.95rem;
+  font-size: 0.88rem;
   color: var(--color-ink);
   margin-bottom: 3px;
+  line-height: 1.3;
+}
+@media (min-width: 640px) {
+  .bookTitle { font-size: 0.95rem; }
 }
 .bookMeta {
   display: flex;
@@ -360,12 +383,13 @@
 .bookActions {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 5px;
   flex-shrink: 0;
+  align-self: flex-start;
 }
 .actionBtn {
-  width: 34px;
-  height: 34px;
+  width: 30px;
+  height: 30px;
   border-radius: 8px;
   border: 1px solid var(--color-border);
   background: var(--color-card);
@@ -375,6 +399,9 @@
   justify-content: center;
   color: var(--color-ink-muted);
   transition: background 0.15s, color 0.15s;
+}
+@media (min-width: 640px) {
+  .actionBtn { width: 34px; height: 34px; }
 }
 .actionBtn:hover { background: var(--color-border); color: var(--color-ink); }
 .saveBtn { background: #d1fae5; border-color: #34d399; color: #065f46; }
@@ -386,22 +413,32 @@
 .toggleOff { color: var(--color-ink-muted); }
 .genreGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-  gap: 10px;
-  padding: 10px 0;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 8px;
+  padding: 8px 0;
+}
+
+@media (min-width: 640px) {
+  .genreGrid {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 10px;
+    padding: 10px 0;
+  }
 }
 
 .genreCheckbox {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   color: var(--color-ink);
   cursor: pointer;
+  padding: 4px 2px;
 }
 
 .genreCheckbox input {
   cursor: pointer;
-  width: 16px;
-  height: 16px;
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
 }

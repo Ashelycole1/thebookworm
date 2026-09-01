@@ -10,22 +10,8 @@ interface GenreFilterProps {
 
 export default function GenreFilter({ active, onChange }: GenreFilterProps) {
   return (
-    <div
-      style={{
-        maxWidth: 1180,
-        margin: "0 auto",
-        padding: "48px 24px 16px",
-      }}
-    >
-      <div
-        style={{
-          display: "flex",
-          gap: 10,
-          overflowX: "auto",
-          paddingBottom: 4,
-          scrollbarWidth: "none",
-        }}
-      >
+    <div className="genre-filter-wrap" style={{ marginTop: 28 }}>
+      <div className="genre-scroll" style={{ display: "flex", gap: 10, paddingBottom: 4 }}>
         {GENRES.map((g) => (
           <button
             key={g}
