@@ -8,7 +8,7 @@ interface CoverProps {
   book: Book;
   size?: "grid" | "detail";
   wishlisted?: boolean;
-  onToggleWishlist?: (id: number) => void;
+  onToggleWishlist?: (id: string | number) => void;
 }
 
 export default function Cover({
@@ -17,7 +17,9 @@ export default function Cover({
   wishlisted = false,
   onToggleWishlist,
 }: CoverProps) {
-  const p = palette(book.id);
+  // We can hash the string ID to get a stable color palette index
+  const idNum = typeof book.id === 'string' ? book.id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0) : book.id;
+  const p = palette(idNum);
   const titleSize = size === "grid" ? "1rem" : "1.5rem";
   const authorSize = size === "grid" ? "0.72rem" : "0.85rem";
   const padding = size === "grid" ? "16% 16%" : "12% 12%";
@@ -28,7 +30,7 @@ export default function Cover({
         position: "relative",
         width: "100%",
         paddingTop: "115%",
-        background: p.bg,
+        background: book.coverImageUrl ? `url(${book.coverImageUrl}) center/cover no-repeat` : p.bg,
         borderRadius: 16,
         overflow: "hidden",
       }}
@@ -58,38 +60,41 @@ export default function Cover({
           />
         </button>
       )}
-      <div
-        style={{
-          position: "absolute",
-          inset: 0,
-          padding,
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "flex-end",
-        }}
-      >
+      {/* Only show the title overlay if there is no cover image */}
+      {!book.coverImageUrl && (
         <div
           style={{
-            fontWeight: 800,
-            color: p.text,
-            fontSize: titleSize,
-            lineHeight: 1.15,
+            position: "absolute",
+            inset: 0,
+            padding,
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "flex-end",
           }}
         >
-          {book.title}
+          <div
+            style={{
+              fontWeight: 800,
+              color: p.text,
+              fontSize: titleSize,
+              lineHeight: 1.15,
+            }}
+          >
+            {book.title}
+          </div>
+          <div
+            style={{
+              fontWeight: 500,
+              color: p.text,
+              opacity: 0.75,
+              fontSize: authorSize,
+              marginTop: 4,
+            }}
+          >
+            {book.author}
+          </div>
         </div>
-        <div
-          style={{
-            fontWeight: 500,
-            color: p.text,
-            opacity: 0.75,
-            fontSize: authorSize,
-            marginTop: 4,
-          }}
-        >
-          {book.author}
-        </div>
-      </div>
+      )}
     </div>
   );
 }

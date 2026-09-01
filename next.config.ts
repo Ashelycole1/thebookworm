@@ -1,7 +1,14 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  async rewrites() {
+    return [
+      {
+        source: '/books/public/:path*',
+        destination: '/api/cover?key=:path*',
+      },
+    ]
+  }
 };
 
 export default nextConfig;

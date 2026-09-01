@@ -6,8 +6,8 @@ import BookCard from "./BookCard";
 
 interface BookGridProps {
   books: Book[];
-  wishlist: number[];
-  onToggleWishlist: (id: number) => void;
+  wishlist: (string | number)[];
+  onToggleWishlist: (id: string | number) => void;
   onSelect: (book: Book) => void;
   currency: CurrencyConfig;
 }

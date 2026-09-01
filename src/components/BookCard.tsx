@@ -9,7 +9,7 @@ import { formatPrice } from "@/lib/currency";
 interface BookCardProps {
   book: Book;
   wishlisted: boolean;
-  onToggleWishlist: (id: number) => void;
+  onToggleWishlist: (id: string | number) => void;
   onSelect: (book: Book) => void;
   currency: CurrencyConfig;
 }

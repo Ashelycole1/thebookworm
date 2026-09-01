@@ -9,8 +9,8 @@ import { formatPrice } from "@/lib/currency";
 
 interface DetailModalProps {
   book: Book;
-  wishlist: number[];
-  onToggleWishlist: (id: number) => void;
+  wishlist: (string | number)[];
+  onToggleWishlist: (id: string | number) => void;
   onAddToCart: (book: Book, qty: number) => void;
   onClose: () => void;
   currency: CurrencyConfig;
@@ -99,7 +99,20 @@ export default function DetailModal({
           >
             <ChevronLeft size={16} strokeWidth={2.2} />
           </button>
-          <div className="genre-badge">{book.genre}</div>
+          <div className="modal-meta-row">
+          <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
+            {Array.isArray(book.genre) ? (
+              book.genre.map((g, idx) => (
+                <div key={idx} className="genre-badge">{g}</div>
+              ))
+            ) : (
+              <div className="genre-badge">{book.genre}</div>
+            )}
+          </div>
+          <div className="rating">
+            <span>★</span> {book.rating.toFixed(1)}
+          </div>
+        </div>
           <button
             ref={closeRef}
             className="icon-circle"

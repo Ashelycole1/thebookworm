@@ -11,8 +11,8 @@ interface CartDrawerProps {
   cart: CartLine[];
   books: Book[];
   onClose: () => void;
-  onQtyChange: (id: number, delta: number) => void;
-  onToggleChecked: (id: number) => void;
+  onQtyChange: (id: string | number, delta: number) => void;
+  onToggleChecked: (id: string | number) => void;
   onCheckout: () => void;
   currency: CurrencyConfig;
 }

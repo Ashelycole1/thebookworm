@@ -9,8 +9,11 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.1123.0",
+    "@aws-sdk/s3-request-presigner": "^3.1123.0",
     "@nile-squad/nylonpay-ts": "^2.0.0",
     "lucide-react": "^1.38.0",
+    "mongoose": "^9.9.4",
     "next": "16.3.3",
     "react": "19.2.8",
     "react-dom": "19.2.8"

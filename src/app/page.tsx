@@ -1,8 +1,7 @@
 "use client";
 
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback, useEffect } from "react";
 import { Book, CartLine, Genre } from "@/types";
-import { BOOKS } from "@/data/books";
 import { useCurrency } from "@/hooks/useCurrency";
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
@@ -20,9 +19,13 @@ export default function Home() {
   const [query, setQuery] = useState("");
   const [searchOpen, setSearchOpen] = useState(false);
 
+  // Books state
+  const [books, setBooks] = useState<Book[]>([]);
+  const [loading, setLoading] = useState(true);
+
   // Cart & wishlist
   const [cart, setCart] = useState<CartLine[]>([]);
-  const [wishlist, setWishlist] = useState<number[]>([]);
+  const [wishlist, setWishlist] = useState<(string | number)[]>([]);
   const [cartOpen, setCartOpen] = useState(false);
 
   // Detail modal
@@ -31,10 +34,29 @@ export default function Home() {
   // Nylon Pay
   const [nylonOpen, setNylonOpen] = useState(false);
 
+  // Fetch books on mount
+  useEffect(() => {
+    async function fetchBooks() {
+      try {
+        const res = await fetch("/api/books");
+        const data = await res.json();
+        setBooks(data);
+      } catch (e) {
+        console.error("Failed to fetch books", e);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchBooks();
+  }, []);
+
   // Derived
   const filtered = useMemo(() => {
-    return BOOKS.filter((b) => {
-      const genreOk = genre === "All" || b.genre === genre;
+    return books.filter((b) => {
+      // Check if genre matches (handle both array and single string temporarily)
+      const bookGenres = Array.isArray(b.genre) ? b.genre : [b.genre];
+      const genreOk = genre === "All" || bookGenres.includes(genre);
+      
       const q = query.trim().toLowerCase();
       const queryOk =
         !q ||
@@ -42,7 +64,7 @@ export default function Home() {
         b.author.toLowerCase().includes(q);
       return genreOk && queryOk;
     });
-  }, [genre, query]);
+  }, [books, genre, query]);
 
   const cartCount = cart.reduce((sum, c) => sum + c.qty, 0);
 
@@ -50,7 +72,7 @@ export default function Home() {
     return cart
       .filter((c) => c.checked)
       .reduce((sum, c) => {
-        const book = BOOKS.find((b) => b.id === c.id);
+        const book = books.find((b) => b.id === c.id);
         return sum + (book?.price ?? 0) * c.qty;
       }, 0);
   }, [cart]);
@@ -76,7 +98,7 @@ export default function Home() {
     });
   }, []);
 
-  const changeQty = useCallback((id: number, delta: number) => {
+  const changeQty = useCallback((id: string | number, delta: number) => {
     setCart((prev) =>
       prev
         .map((c) => (c.id === id ? { ...c, qty: c.qty + delta } : c))
@@ -84,13 +106,13 @@ export default function Home() {
     );
   }, []);
 
-  const toggleChecked = useCallback((id: number) => {
+  const toggleChecked = useCallback((id: string | number) => {
     setCart((prev) =>
       prev.map((c) => (c.id === id ? { ...c, checked: !c.checked } : c))
     );
   }, []);
 
-  const toggleWishlist = useCallback((id: number) => {
+  const toggleWishlist = useCallback((id: string | number) => {
     setWishlist((prev) =>
       prev.includes(id) ? prev.filter((w) => w !== id) : [...prev, id]
     );
@@ -136,13 +158,17 @@ export default function Home() {
             padding: "24px 24px 120px",
           }}
         >
-          <BookGrid
-            books={filtered}
-            wishlist={wishlist}
-            onToggleWishlist={toggleWishlist}
-            onSelect={openDetail}
-            currency={currency}
-          />
+          {loading ? (
+            <div style={{ textAlign: "center", padding: "40px" }}>Loading books...</div>
+          ) : (
+            <BookGrid
+              books={filtered}
+              wishlist={wishlist}
+              onToggleWishlist={toggleWishlist}
+              onSelect={openDetail}
+              currency={currency}
+            />
+          )}
         </section>
       </main>
 
@@ -188,7 +214,7 @@ export default function Home() {
       <CartDrawer
         open={cartOpen}
         cart={cart}
-        books={BOOKS}
+        books={books}
         onClose={() => setCartOpen(false)}
         onQtyChange={changeQty}
         onToggleChecked={toggleChecked}
