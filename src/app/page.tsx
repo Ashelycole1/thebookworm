@@ -18,6 +18,10 @@ export default function Home() {
   const [genre, setGenre] = useState<"All" | Genre>("All");
   const [query, setQuery] = useState("");
   const [searchOpen, setSearchOpen] = useState(false);
+  
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const ITEMS_PER_PAGE = 12;
 
   // Books state
   const [books, setBooks] = useState<Book[]>([]);
@@ -65,6 +69,19 @@ export default function Home() {
       return genreOk && queryOk;
     });
   }, [books, genre, query]);
+
+  // Reset page to 1 when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [genre, query]);
+
+  // Compute paginated books
+  const paginatedBooks = useMemo(() => {
+    const start = (currentPage - 1) * ITEMS_PER_PAGE;
+    return filtered.slice(start, start + ITEMS_PER_PAGE);
+  }, [filtered, currentPage]);
+
+  const totalPages = Math.ceil(filtered.length / ITEMS_PER_PAGE);
 
   const cartCount = cart.reduce((sum, c) => sum + c.qty, 0);
 
@@ -155,13 +172,38 @@ export default function Home() {
           {loading ? (
             <div style={{ textAlign: "center", padding: "40px", color: "var(--color-ink-muted)" }}>Loading books...</div>
           ) : (
-            <BookGrid
-              books={filtered}
-              wishlist={wishlist}
-              onToggleWishlist={toggleWishlist}
-              onSelect={openDetail}
-              currency={currency}
-            />
+            <>
+              <BookGrid
+                books={paginatedBooks}
+                wishlist={wishlist}
+                onToggleWishlist={toggleWishlist}
+                onSelect={openDetail}
+                currency={currency}
+              />
+              
+              {/* Pagination Controls */}
+              {totalPages > 1 && (
+                <div className="pagination-wrap">
+                  <button 
+                    className="pagination-btn"
+                    disabled={currentPage === 1}
+                    onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                  >
+                    Previous
+                  </button>
+                  <span className="pagination-info">
+                    Page {currentPage} of {totalPages}
+                  </span>
+                  <button 
+                    className="pagination-btn"
+                    disabled={currentPage === totalPages}
+                    onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                  >
+                    Next
+                  </button>
+                </div>
+              )}
+            </>
           )}
         </section>
       </main>
