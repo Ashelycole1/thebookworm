@@ -171,7 +171,15 @@ export default function Home() {
 
         <section className="container section-gap" style={{ paddingBottom: 100 }}>
           {loading ? (
-            <div style={{ textAlign: "center", padding: "40px", color: "var(--color-ink-muted)" }}>Loading books...</div>
+            <div className="grid">
+              {Array.from({ length: 8 }).map((_, i) => (
+                <div key={i} style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                  <div style={{ aspectRatio: "2/3", background: "var(--color-border)", borderRadius: 16, animation: "pulse 1.5s infinite ease-in-out" }} />
+                  <div style={{ height: 16, background: "var(--color-border)", borderRadius: 4, width: "80%", animation: "pulse 1.5s infinite ease-in-out" }} />
+                  <div style={{ height: 14, background: "var(--color-border)", borderRadius: 4, width: "50%", animation: "pulse 1.5s infinite ease-in-out" }} />
+                </div>
+              ))}
+            </div>
           ) : (
             <>
               <BookGrid
