@@ -124,7 +124,9 @@ async function importOne(gb) {
   ]);
 
   // 3. Save metadata to MongoDB
-  const genre = gb.bookshelves?.[0]?.replace(/\(Bookshelf\)/i, "").trim() || TOPIC;
+  // Always use the import TOPIC as genre so it matches the site's genre filter tabs.
+  // Gutenberg bookshelf names are arbitrary (e.g. "Harvard Classics") and won't match.
+  const genre = TOPIC;
   const result = await createBookRecord({
     title,
     author,

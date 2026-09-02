@@ -6,7 +6,7 @@ const genres = [
   "Data Science",
   "Mathematics",
   "Science",
-  "Medicine",
+  "Medicine & Health",
   "Law",
   "Business",
   "Finance",
