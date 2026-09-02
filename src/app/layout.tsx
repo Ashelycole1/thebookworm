@@ -4,6 +4,7 @@ import type { Viewport } from "next";
 import { Manrope } from "next/font/google";
 import "./globals.css";
 import PwaRegister from "@/components/PwaRegister";
+import WhatsAppFab from "@/components/WhatsAppFab";
 
 const manrope = Manrope({
   subsets: ["latin"],
@@ -69,6 +70,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={manrope.className}>
         <PwaRegister />
+        <WhatsAppFab />
         {children}
       </body>
     </html>
