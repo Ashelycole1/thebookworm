@@ -1,7 +1,9 @@
 import React from "react";
 import type { Metadata } from "next";
+import type { Viewport } from "next";
 import { Manrope } from "next/font/google";
 import "./globals.css";
+import PwaRegister from "@/components/PwaRegister";
 
 const manrope = Manrope({
   subsets: ["latin"],
@@ -13,10 +15,20 @@ export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"
   ),
+  applicationName: "The Bookworm",
   title: "The Bookworm — Hand-picked Digital Books",
   description:
     "Browse and buy twelve hand-picked digital books. No subscriptions, no shipping — buy once, download instantly, keep forever.",
   keywords: ["books", "ebooks", "digital books", "buy books online"],
+  manifest: "/manifest.webmanifest",
+  appleWebApp: {
+    capable: true,
+    title: "The Bookworm",
+    statusBarStyle: "default",
+  },
+  formatDetection: {
+    telephone: false,
+  },
   icons: {
     icon: [
       { url: "/favicon.ico", sizes: "any" },
@@ -43,6 +55,11 @@ export const metadata: Metadata = {
   },
 };
 
+export const viewport: Viewport = {
+  themeColor: "#E8B930",
+  colorScheme: "light",
+};
+
 export default function RootLayout({
   children,
 }: {
@@ -50,7 +67,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={manrope.className}>{children}</body>
+      <body className={manrope.className}>
+        <PwaRegister />
+        {children}
+      </body>
     </html>
   );
 }
