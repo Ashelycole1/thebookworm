@@ -16,9 +16,9 @@ export const metadata: Metadata = {
     process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"
   ),
   applicationName: "The Bookworm",
-  title: "The Bookworm — Hand-picked Digital Books",
+  title: "The Bookworm",
   description:
-    "Browse and buy twelve hand-picked digital books. No subscriptions, no shipping — buy once, download instantly, keep forever.",
+    "Your one-stop shop for digital books. No subscriptions, no shipping — buy once, download instantly, keep forever.",
   keywords: ["books", "ebooks", "digital books", "buy books online"],
   manifest: "/manifest.webmanifest",
   appleWebApp: {
@@ -42,7 +42,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "The Bookworm",
     description:
-      "Twelve hand-picked digital books. Buy once, keep forever.",
+      "Your one-stop shop for digital books. Buy once, keep forever.",
     type: "website",
     images: [
       {
