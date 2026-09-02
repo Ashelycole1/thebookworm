@@ -424,11 +424,17 @@ body {
 }
 
 .hero-bg {
-  /* blend with the page background instead of a pale yellow card */
+  /* Decorative background (pen.png) with a breathable overlay and responsive sizing */
   margin: 0;
   border-radius: 0;
-  background: var(--color-bg);
-  padding: 46px 28px;
+  background-color: var(--color-bg);
+  background-image: linear-gradient(rgba(255,255,255,0.70), rgba(255,255,255,0.70)), url('/pen.png');
+  background-repeat: no-repeat;
+  background-position: right top;
+  background-size: 420px auto; /* default desktop size */
+  background-attachment: scroll;
+  padding: 56px 28px;
+  min-height: 420px;
   position: relative;
   overflow: hidden;
 }
@@ -450,6 +456,27 @@ body {
 
 @media (max-width: 820px) {
   .hero-grid { grid-template-columns: 1fr; gap: 24px; }
+}
+
+/* Adjust hero background image size/position on smaller screens */
+@media (max-width: 640px) {
+  .hero-bg {
+    /* let the pen be visible on mobile while keeping text legible */
+    background-image: linear-gradient(rgba(255,255,255,0.60), rgba(255,255,255,0.60)), url('/pen.png');
+    background-position: center top;
+    background-size: 220px auto;
+    padding: 34px 16px;
+    min-height: 340px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .hero-bg {
+    background-position: calc(100% - 48px) top;
+    background-size: 520px auto;
+    padding: 72px 28px;
+    min-height: 480px;
+  }
 }
 
 .hero-copy { max-width: 640px; }
