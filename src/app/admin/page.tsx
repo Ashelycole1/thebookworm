@@ -84,28 +84,91 @@ export default function AdminPage() {
     e.preventDefault();
     setUploading(true);
     setUploadMsg(null);
-    const formData = new FormData(e.currentTarget);
-    uploadGenres.forEach(g => formData.append("genre", g));
+
+    const form = e.currentTarget;
+    const title = (form.elements.namedItem("title") as HTMLInputElement).value;
+    const author = (form.elements.namedItem("author") as HTMLInputElement).value;
+    const description = (form.elements.namedItem("description") as HTMLTextAreaElement).value;
+    const priceUGX = (form.elements.namedItem("priceUGX") as HTMLInputElement).value;
+    const coverImageFile = (form.elements.namedItem("coverImage") as HTMLInputElement).files?.[0];
+    const pdfFile = (form.elements.namedItem("file") as HTMLInputElement).files?.[0];
+
+    if (!coverImageFile || !pdfFile) {
+      setUploadMsg({ type: "error", text: "Please select both a cover image and a PDF file." });
+      setUploading(false);
+      return;
+    }
+
     try {
-      const res = await fetch("/api/admin/books", { method: "POST", body: formData });
-      const data = await res.json();
-      if (res.ok) {
-        setUploadMsg({ type: "success", text: `"${formData.get("title")}" published! Refresh the homepage to see it.` });
-        (e.target as HTMLFormElement).reset();
-        setSelectedCover(null);
-        setSelectedFile(null);
-        setUploadGenres(["Fiction"]);
-      } else {
-        setUploadMsg({ type: "error", text: data.error || `Upload failed (HTTP ${res.status}).` });
+      // Step 1: Get presigned PUT URLs from our API (tiny JSON request, no file data)
+      setUploadMsg({ type: "error", text: "" }); // clear
+      const presignRes = await fetch("/api/admin/presign", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          pdfFilename: pdfFile.name,
+          pdfContentType: pdfFile.type || "application/pdf",
+          coverFilename: coverImageFile.name,
+          coverContentType: coverImageFile.type || "image/jpeg",
+        }),
+      });
+
+      if (!presignRes.ok) {
+        const err = await presignRes.json().catch(() => ({}));
+        throw new Error(err.error || `Presign failed (${presignRes.status})`);
       }
+
+      const { pdfUploadUrl, pdfKey, coverUploadUrl, coverKey } = await presignRes.json();
+
+      // Step 2: Upload PDF and cover image DIRECTLY to R2 (bypasses Vercel limits)
+      const [pdfUpload, coverUpload] = await Promise.all([
+        fetch(pdfUploadUrl, {
+          method: "PUT",
+          headers: { "Content-Type": pdfFile.type || "application/pdf" },
+          body: pdfFile,
+        }),
+        fetch(coverUploadUrl, {
+          method: "PUT",
+          headers: { "Content-Type": coverImageFile.type || "image/jpeg" },
+          body: coverImageFile,
+        }),
+      ]);
+
+      if (!pdfUpload.ok) throw new Error(`PDF upload to storage failed (${pdfUpload.status})`);
+      if (!coverUpload.ok) throw new Error(`Cover upload to storage failed (${coverUpload.status})`);
+
+      // Step 3: Save metadata to MongoDB (tiny JSON, no files)
+      const metaRes = await fetch("/api/admin/books", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title,
+          author,
+          description,
+          priceUGX: Number(priceUGX),
+          genre: uploadGenres,
+          fileStorageKey: pdfKey,
+          coverStorageKey: coverKey,
+        }),
+      });
+
+      const metaData = await metaRes.json();
+      if (!metaRes.ok) throw new Error(metaData.error || `Save failed (${metaRes.status})`);
+
+      setUploadMsg({ type: "success", text: `"${title}" published successfully!` });
+      (e.target as HTMLFormElement).reset();
+      setSelectedCover(null);
+      setSelectedFile(null);
+      setUploadGenres(["Fiction"]);
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : "Network error — check your connection.";
+      const msg = err instanceof Error ? err.message : "Upload failed — please try again.";
       setUploadMsg({ type: "error", text: msg });
       console.error("[Admin upload error]", err);
     } finally {
       setUploading(false);
     }
   }
+
 
   // --- Edit handlers ---
   function startEdit(book: AdminBook) {
