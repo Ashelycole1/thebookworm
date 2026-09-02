@@ -96,10 +96,12 @@ export default function AdminPage() {
         setSelectedFile(null);
         setUploadGenres(["Fiction"]);
       } else {
-        setUploadMsg({ type: "error", text: data.error || "Upload failed." });
+        setUploadMsg({ type: "error", text: data.error || `Upload failed (HTTP ${res.status}).` });
       }
-    } catch {
-      setUploadMsg({ type: "error", text: "An unexpected error occurred." });
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : "Network error — check your connection.";
+      setUploadMsg({ type: "error", text: msg });
+      console.error("[Admin upload error]", err);
     } finally {
       setUploading(false);
     }
