@@ -166,6 +166,19 @@ export default function OrderLookupPage() {
             </button>
           </div>
         )}
+
+        <div style={{ marginTop: 40, textAlign: "center", padding: "24px", background: "var(--color-card)", borderRadius: 16, border: "1px solid var(--color-border)" }}>
+          <p style={{ fontSize: "0.95rem", color: "var(--color-ink-muted)", marginBottom: 12 }}>Can't find your order or need help?</p>
+          <a 
+            href={process.env.NEXT_PUBLIC_WHATSAPP_LINK ?? "https://chat.whatsapp.com/your-community-code"} 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            style={{ color: "var(--color-ink)", fontWeight: 700, display: "inline-flex", alignItems: "center", gap: 8, textDecoration: "none" }}
+          >
+            <img src="/whatsapp.svg" alt="WhatsApp" width={20} height={20} />
+            Message us on WhatsApp
+          </a>
+        </div>
       </main>
     </div>
   );

@@ -410,6 +410,19 @@ export default function NylonPayModal({
               >
                 DONE
               </button>
+
+              <div style={{ marginTop: 24, textAlign: "center", borderTop: "1px solid var(--color-border)", paddingTop: 16 }}>
+                <p style={{ fontSize: "0.82rem", color: "var(--color-ink-muted)", marginBottom: 8 }}>Payment issue?</p>
+                <a 
+                  href={process.env.NEXT_PUBLIC_WHATSAPP_LINK ?? "https://chat.whatsapp.com/your-community-code"} 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  style={{ color: "var(--color-ink)", fontWeight: 700, display: "inline-flex", alignItems: "center", gap: 6, textDecoration: "none", fontSize: "0.85rem" }}
+                >
+                  <img src="/whatsapp.svg" alt="WhatsApp" width={16} height={16} />
+                  Message us on WhatsApp
+                </a>
+              </div>
             </div>
           </div>
         )}

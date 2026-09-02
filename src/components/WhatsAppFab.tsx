@@ -29,8 +29,8 @@ export default function WhatsAppFab() {
       // ignore
     }
 
-    // default: bottom-left small offset
-    const defaultX = 18;
+    // default: bottom-right small offset
+    const defaultX = window.innerWidth - size - 18;
     const defaultY = window.innerHeight - size - 18;
     setPos({ x: defaultX, y: defaultY });
   }, []);
