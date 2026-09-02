@@ -1627,6 +1627,29 @@ body {
   .footer-credit { justify-self: end; }
 }
 
+/* Mobile: center the footer bottom row and credit horizontally */
+@media (max-width: 759px) {
+  .footer-bottom {
+    justify-items: center;
+    text-align: center;
+    grid-auto-flow: row;
+    align-items: center;
+  }
+
+  .footer-credit {
+    justify-self: center;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .footer-credit a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+}
+
 /* ============================================================
    FOCUS STATES (Accessibility)
    ============================================================ */

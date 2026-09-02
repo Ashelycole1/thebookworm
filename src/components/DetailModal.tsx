@@ -114,18 +114,18 @@ export default function DetailModal({
             <ChevronLeft size={16} strokeWidth={2.2} />
           </button>
           <div className="modal-meta-row">
-          <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
-            {Array.isArray(book.genre) ? (
-              book.genre.map((g, idx) => (
-                <div key={idx} className="genre-badge">{g}</div>
-              ))
-            ) : (
-              <div className="genre-badge">{book.genre}</div>
-            )}
-          </div>
-          <div className="rating">
-            <span>★</span> {book.rating.toFixed(1)}
-          </div>
+            <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
+              {Array.isArray(book.genre) ? (
+                book.genre.map((g, idx) => (
+                  <div key={idx} className="genre-badge">{g}</div>
+                ))
+              ) : (
+                <div className="genre-badge">{book.genre}</div>
+              )}
+            </div>
+            <div className="rating">
+              <Rating value={book.rating} size={12} id={book.id} />
+            </div>
           </div>
           <div style={{ display: "flex", gap: "8px" }}>
             <button
@@ -179,7 +179,7 @@ export default function DetailModal({
               >
                 {book.author}
               </span>
-              <Rating value={book.rating} size={13} />
+              <Rating value={book.rating} size={13} id={book.id} />
             </div>
 
             {/* Format selector */}

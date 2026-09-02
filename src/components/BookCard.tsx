@@ -48,7 +48,7 @@ export default function BookCard({
           <span className="book-card-author">
             {book.author}
           </span>
-          <Rating value={book.rating} />
+          <Rating value={book.rating} id={book.id} />
         </div>
         <div className="book-card-price">
           {formatPrice(book.price, currency)}

@@ -37,7 +37,7 @@ export const BOOKS: Book[] = [
     author: "Nadia Okafor",
     genre: ["Fiction"],
     price: 14,
-    rating: 4.6,
+    rating: 4.0,
     blurb:
       "A coastal town keeps rebuilding after every storm, until one family decides not to.",
     formats: ["Ebook", "PDF", "Audiobook"],
@@ -48,7 +48,7 @@ export const BOOKS: Book[] = [
     author: "Peter Voss",
     genre: ["Essays"],
     price: 12,
-    rating: 4.3,
+    rating: 4.1,
     blurb:
       "Twenty essays on reading, written in the margins of other people's books.",
     formats: ["Ebook", "PDF"],
@@ -59,7 +59,7 @@ export const BOOKS: Book[] = [
     author: "Ren Kessler",
     genre: ["Essays"],
     price: 10,
-    rating: 4.8,
+    rating: 4.9,
     blurb: "A year of tide charts turned into quiet, exact poems.",
     formats: ["Ebook", "PDF"],
   },
@@ -69,7 +69,7 @@ export const BOOKS: Book[] = [
     author: "Ines Calder",
     genre: ["Fiction"],
     price: 15,
-    rating: 4.4,
+    rating: 4.2,
     blurb: "Three siblings inherit a house and everything it never told them.",
     formats: ["Ebook", "PDF", "Audiobook"],
   },
@@ -79,7 +79,7 @@ export const BOOKS: Book[] = [
     author: "Marcus Adeyemi",
     genre: ["Nonfiction"],
     price: 18,
-    rating: 4.1,
+    rating: 4.3,
     blurb:
       "A study of the buildings that outlive the reasons they were built.",
     formats: ["Ebook", "PDF"],
@@ -101,7 +101,7 @@ export const BOOKS: Book[] = [
     author: "Priya Balan",
     genre: ["Fiction"],
     price: 13,
-    rating: 4.5,
+    rating: 4.4,
     blurb:
       "A hospital cleaner, a stray cat, and the hours nobody else wants.",
     formats: ["Ebook", "PDF", "Audiobook"],
@@ -112,7 +112,7 @@ export const BOOKS: Book[] = [
     author: "June Torres",
     genre: ["Essays"],
     price: 9,
-    rating: 4.9,
+    rating: 5.0,
     blurb: "Short poems about the parts of a day too small to mention.",
     formats: ["Ebook", "PDF"],
   },
@@ -122,7 +122,7 @@ export const BOOKS: Book[] = [
     author: "Owen Bratt",
     genre: ["Nonfiction"],
     price: 19,
-    rating: 4.0,
+    rating: 4.5,
     blurb:
       "Cartographers who kept drawing coastlines after the coastlines moved.",
     formats: ["Ebook", "PDF"],
@@ -133,7 +133,7 @@ export const BOOKS: Book[] = [
     author: "Elin Marsh",
     genre: ["Essays"],
     price: 12,
-    rating: 4.2,
+    rating: 4.6,
     blurb:
       "Letters never sent, annotated decades later by the person who wrote them.",
     formats: ["Ebook", "PDF"],
@@ -144,7 +144,7 @@ export const BOOKS: Book[] = [
     author: "Yusuf Demir",
     genre: ["Design"],
     price: 20,
-    rating: 4.6,
+    rating: 4.8,
     blurb:
       "How postwar housing blocks accidentally became some of the greenest places in Europe.",
     formats: ["PDF"],
@@ -155,7 +155,7 @@ export const BOOKS: Book[] = [
     author: "Alba Reyes",
     genre: ["Fiction"],
     price: 16,
-    rating: 4.3,
+    rating: 4.1,
     blurb:
       "A forester's daughter learns to read a forest the way her mother taught her.",
     formats: ["Ebook", "PDF", "Audiobook"],
