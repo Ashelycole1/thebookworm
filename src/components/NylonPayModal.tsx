@@ -2,12 +2,14 @@
 
 import { useEffect, useRef, useState } from "react";
 import { X, Check, Smartphone } from "lucide-react";
-import { CurrencyConfig } from "@/types";
+import { CurrencyConfig, Book } from "@/types";
 import { formatPrice } from "@/lib/currency";
 
 interface NylonPayModalProps {
   total: number;
   currency: CurrencyConfig;
+  cart: { id: string | number; qty: number; checked: boolean }[];
+  books: Book[];
   onClose: () => void;
   onSuccess: () => void;
 }
@@ -17,12 +19,15 @@ type PayStep = "form" | "pending" | "success";
 export default function NylonPayModal({
   total,
   currency,
+  cart,
+  books,
   onClose,
   onSuccess,
 }: NylonPayModalProps) {
   const [step, setStep] = useState<PayStep>("form");
   const [phone, setPhone] = useState("");
   const [phoneError, setPhoneError] = useState("");
+  const [downloads, setDownloads] = useState<{title: string; url: string}[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
   const pollRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -89,13 +94,35 @@ export default function NylonPayModal({
           const statusRes = await fetch(`/api/checkout/status?reference=${data.reference}`);
           const statusData = await statusRes.json();
           
-          if (statusData.status === "success") {
+          const currentStatus = (statusData.status || "").toLowerCase();
+          if (currentStatus === "success" || currentStatus === "successful") {
             if (pollRef.current) clearInterval(pollRef.current);
+            
+            // Fetch download links
+            const fetchedUrls = [];
+            for (const item of cart) {
+              const book = books.find(b => b.id === item.id);
+              if (!book) continue;
+              try {
+                const dRes = await fetch("/api/download", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ transactionId: data.reference, bookId: item.id })
+                });
+                if (dRes.ok) {
+                  const dData = await dRes.json();
+                  if (dData.downloadUrl) {
+                    fetchedUrls.push({ title: book.title, url: dData.downloadUrl });
+                  }
+                }
+              } catch (e) {
+                console.error("Failed to fetch download link for", book.title, e);
+              }
+            }
+            setDownloads(fetchedUrls);
             setStep("success");
-            setTimeout(() => {
-              onSuccess();
-            }, 2000);
-          } else if (statusData.status === "failed" || statusData.status === "error") {
+            // Do NOT auto-close, let user download their books and click Done.
+          } else if (currentStatus === "failed" || currentStatus === "error") {
             if (pollRef.current) clearInterval(pollRef.current);
             setPhoneError("Payment failed or was cancelled by provider.");
             setStep("form");
@@ -150,11 +177,9 @@ export default function NylonPayModal({
               Powered by Nylon Pay
             </div>
           </div>
-          {step !== "pending" && (
-            <button className="icon-circle" onClick={onClose} aria-label="Close payment">
-              <X size={16} strokeWidth={2.2} />
-            </button>
-          )}
+          <button className="icon-circle" onClick={onClose} aria-label="Close payment">
+            <X size={16} strokeWidth={2.2} />
+          </button>
         </div>
 
         {/* Amount */}
@@ -328,13 +353,62 @@ export default function NylonPayModal({
                 fontSize: "0.82rem",
                 color: "var(--color-ink-muted)",
                 marginTop: 8,
-                maxWidth: 260,
                 lineHeight: 1.55,
                 fontWeight: 500,
               }}
             >
-              Your books are on their way. Check your email for download links.
+              Your books are ready. Click below to download them directly. These links will expire in 15 minutes.
             </p>
+
+            <div style={{ width: "100%", marginTop: 24, textAlign: "left" }}>
+              {downloads.length > 0 ? (
+                downloads.map((d, i) => (
+                  <a
+                    key={i}
+                    href={d.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn-black"
+                    style={{
+                      display: "block",
+                      width: "100%",
+                      padding: "12px",
+                      fontSize: "0.85rem",
+                      borderRadius: 12,
+                      marginBottom: 10,
+                      textAlign: "center",
+                      textDecoration: "none",
+                    }}
+                  >
+                    Download "{d.title}"
+                  </a>
+                ))
+              ) : (
+                <p style={{ fontSize: "0.82rem", color: "#C0392B", textAlign: "center", marginBottom: 12 }}>
+                  Failed to fetch some download links. Please contact support.
+                </p>
+              )}
+              
+              <button
+                onClick={() => {
+                  onSuccess();
+                  onClose();
+                }}
+                className="meta-label"
+                style={{
+                  width: "100%",
+                  background: "none",
+                  border: "none",
+                  color: "var(--color-ink-muted)",
+                  marginTop: 12,
+                  cursor: "pointer",
+                  padding: "8px",
+                  textAlign: "center"
+                }}
+              >
+                DONE
+              </button>
+            </div>
           </div>
         )}
       </div>

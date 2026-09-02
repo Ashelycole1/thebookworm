@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import styles from "./admin.module.css";
-import { Upload, Book, FileText, ImageIcon, DollarSign, Tag, Pencil, Trash2, ToggleLeft, ToggleRight, Check, X } from "lucide-react";
+import { Upload, Book, FileText, ImageIcon, DollarSign, Tag, Pencil, Trash2, ToggleLeft, ToggleRight, Check, X, Link } from "lucide-react";
 
 const GENRES = [
   "Programming",
@@ -168,6 +168,18 @@ export default function AdminPage() {
     if (!confirm(`Delete "${title}"? This cannot be undone.`)) return;
     await fetch(`/api/admin/books/${id}`, { method: "DELETE" });
     fetchBooks();
+  }
+
+  async function copyDownloadLink(id: string, title: string) {
+    try {
+      const res = await fetch(`/api/admin/books/${id}/download`);
+      if (!res.ok) throw new Error("Failed");
+      const { url } = await res.json();
+      await navigator.clipboard.writeText(url);
+      alert(`Download link for "${title}" copied to clipboard!\n\nThis link is valid for 24 hours. You can send it to the customer.`);
+    } catch (err) {
+      alert("Error generating download link.");
+    }
   }
 
   return (
@@ -466,6 +478,13 @@ export default function AdminPage() {
                       </>
                     ) : (
                       <>
+                        <button
+                          className={styles.actionBtn}
+                          onClick={() => copyDownloadLink(book._id, book.title)}
+                          title="Copy Download Link (valid for 24hrs)"
+                        >
+                          <Link size={16} />
+                        </button>
                         <button
                           className={styles.actionBtn}
                           onClick={() => startEdit(book)}
