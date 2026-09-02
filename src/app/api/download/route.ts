@@ -3,6 +3,7 @@ import { GetObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import connectDB from "@/lib/db";
 import Book from "@/models/Book";
+import Order from "@/models/Order";
 import { r2 } from "@/lib/r2";
 
 /** Duration in seconds the presigned URL stays valid (15 minutes) */
@@ -45,28 +46,17 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     await connectDB();
 
     // -----------------------------------------------------------------------
-    // 1. PAYMENT VERIFICATION STEP (Mobile Money / NylonPay webhook record)
+    // 1. PAYMENT VERIFICATION STEP
     // -----------------------------------------------------------------------
-    // TODO: Replace the placeholder below with real Order collection lookup:
-    //
-    //   import Order from "@/models/Order";
-    //   const order = await Order.findOne({
-    //     transactionId,
-    //     bookId,
-    //     status: "SUCCESSFUL",
-    //   });
-    //   if (!order) {
-    //     return NextResponse.json(
-    //       { error: "Invalid or unverified transaction reference." },
-    //       { status: 403 }
-    //     );
-    //   }
-    //
-    const isPaymentVerified = true; // Placeholder — swap with real check above
+    const order = await Order.findOne({
+      transactionId,
+      books: bookId,
+      status: "SUCCESSFUL",
+    });
 
-    if (!isPaymentVerified) {
+    if (!order) {
       return NextResponse.json(
-        { error: "Payment verification failed. Download forbidden." },
+        { error: "Payment verification failed or book not in order. Download forbidden." },
         { status: 403 }
       );
     }

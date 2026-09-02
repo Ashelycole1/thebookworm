@@ -1,11 +1,13 @@
 import { NextResponse } from "next/server";
 import { createNylonPay } from "@nile-squad/nylonpay-ts";
+import connectDB from "@/lib/db";
+import Order from "@/models/Order";
 
 export async function POST(request: Request) {
   try {
-    const { amount, currency, phoneNumber } = await request.json();
+    const { amount, currency, phoneNumber, cart } = await request.json();
 
-    if (!amount || !currency || !phoneNumber) {
+    if (!amount || !currency || !phoneNumber || !cart || !Array.isArray(cart)) {
       return NextResponse.json(
         { error: "Missing required fields" },
         { status: 400 }
@@ -33,6 +35,16 @@ export async function POST(request: Request) {
         phoneNumber,
       },
       description: "Book Purchase",
+    });
+
+    await connectDB();
+    await Order.create({
+      transactionId: payment.reference,
+      phoneNumber,
+      status: "PENDING",
+      totalAmount: amount,
+      currency,
+      books: cart,
     });
 
     return NextResponse.json({ reference: payment.reference });

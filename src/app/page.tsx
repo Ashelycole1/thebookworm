@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState, useMemo, useCallback, useEffect } from "react";
 import { Book, CartLine, Genre } from "@/types";
 import { useCurrency } from "@/hooks/useCurrency";
@@ -223,6 +224,7 @@ export default function Home() {
               &copy; 2026 The Bookworm
             </span>
             <div className="footer-links">
+              <Link href="/lookup">Find My Books</Link>
               <a href="/terms">Terms of Use</a>
               <a href="/privacy">Privacy Policy</a>
               <a href="/disclaimer">Disclaimers</a>

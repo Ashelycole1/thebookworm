@@ -31,11 +31,12 @@ html {
 }
 
 body {
-  background: var(--color-bg);
+  background-color: var(--color-bg);
   color: var(--color-ink);
-  font-family: var(--font);
-  font-weight: 500;
+  line-height: 1.5;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
 }
 
 /* --- Layout helpers --- */
@@ -177,10 +178,19 @@ body {
 }
 
 .header-search-wrap.open {
-  max-width: 220px;
+  max-width: calc(100vw - 160px);
   width: 220px;
   box-shadow: 0 0 0 2px rgba(232, 185, 48, 0.35);
   border-color: rgba(232, 185, 48, 0.5);
+}
+
+@media (max-width: 480px) {
+  .header-brand-text {
+    display: none;
+  }
+  .header-search-wrap.open {
+    max-width: calc(100vw - 120px);
+  }
 }
 
 @media (min-width: 640px) {

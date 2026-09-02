@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 import { createNylonPay } from "@nile-squad/nylonpay-ts";
+import connectDB from "@/lib/db";
+import Order from "@/models/Order";
 
 export async function GET(request: Request) {
   try {
@@ -36,7 +38,26 @@ export async function GET(request: Request) {
       );
     }
 
-    return NextResponse.json({ status: result.value.status });
+    const currentStatus = result.value.status;
+    
+    // Update Order in DB
+    try {
+      await connectDB();
+      // Ensure we only update to SUCCESSFUL or FAILED, if it's currently PENDING
+      // or just trust NylonPay's status.
+      const normalizedStatus = currentStatus.toUpperCase() === "SUCCESSFUL" || currentStatus.toUpperCase() === "SUCCESS" ? "SUCCESSFUL" 
+                             : currentStatus.toUpperCase() === "FAILED" ? "FAILED" 
+                             : "PENDING";
+                             
+      await Order.findOneAndUpdate(
+        { transactionId: reference },
+        { status: normalizedStatus }
+      );
+    } catch (dbErr) {
+      console.error("Failed to update order status in DB", dbErr);
+    }
+
+    return NextResponse.json({ status: currentStatus });
   } catch (error: unknown) {
     console.error("Nylon Pay Status Error:", error);
     const message = error instanceof Error ? error.message : "Failed to check status";

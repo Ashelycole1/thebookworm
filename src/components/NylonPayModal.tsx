@@ -78,6 +78,7 @@ export default function NylonPayModal({
           amount: Math.round(total * currency.rate),
           currency: currency.code,
           phoneNumber: phone,
+          cart: cart.map(item => item.id),
         }),
       });
       
