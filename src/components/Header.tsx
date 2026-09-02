@@ -21,6 +21,7 @@ export default function Header({
   query,
   onQueryChange,
 }: HeaderProps) {
+  const whatsappLink = process.env.NEXT_PUBLIC_WHATSAPP_LINK ?? "https://chat.whatsapp.com/your-community-code";
   return (
     <header className="site-header">
       <div className="header-inner">
@@ -50,6 +51,17 @@ export default function Header({
         </nav>
 
         <div className="header-actions">
+          <a
+            href={whatsappLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="header-whatsapp-btn"
+            aria-label="Join The Bookworm WhatsApp community"
+            title="Join The Bookworm WhatsApp community"
+          >
+            <img src="/whatsapp.svg" alt="WhatsApp" width={18} height={18} />
+            <span className="whatsapp-label">Join</span>
+          </a>
           <div className={`header-search-wrap${searchOpen ? ' open' : ''}`}>
             {searchOpen && (
               <input

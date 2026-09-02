@@ -384,6 +384,42 @@ body {
   transform: scale(0.97);
 }
 
+/* Header WhatsApp button */
+.header-whatsapp-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: transparent;
+  border: 1.5px solid rgba(37,99,36,0.08);
+  color: var(--color-ink);
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
+}
+
+.header-whatsapp-btn img { display: block; }
+.header-whatsapp-btn .whatsapp-label { font-weight: 700; font-size: 0.92rem; }
+
+.header-whatsapp-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px -18px rgba(6,40,12,0.12);
+  background: rgba(37,99,36,0.06);
+}
+
+@media (max-width: 820px) {
+  /* On smaller screens, collapse to icon-only to save space */
+  .header-whatsapp-btn { padding: 8px; gap: 6px; }
+  .header-whatsapp-btn .whatsapp-label { display: none; }
+}
+
+@media (max-width: 560px) {
+  /* Hide from header on very small screens (FAB still available) */
+  .header-whatsapp-btn { display: none; }
+}
+
 .header-cart-label {
   display: inline-block;
 }
