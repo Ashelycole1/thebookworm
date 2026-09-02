@@ -23,15 +23,20 @@ const getArg = (name, fallback) => {
   return i !== -1 ? process.argv[i + 1] : fallback;
 };
 
-const TOPIC = getArg("topic", "fiction");
+const TOPIC = getArg("topic", "");
+const SORT = getArg("sort", "");          // e.g. --sort popular
+const GENRE = getArg("genre", TOPIC);    // override genre tag, defaults to TOPIC
 const COUNT = parseInt(getArg("count", "15"), 10);
 const SITE = getArg("site", "http://localhost:3000");
-const USD_TO_UGX = parseInt(getArg("rate", "3700"), 10); // adjust to current rate
-const FLAT_PRICE_UGX = getArg("price", null); // e.g. --price 5000 to override entirely
+const USD_TO_UGX = parseInt(getArg("rate", "3700"), 10);
+const FLAT_PRICE_UGX = getArg("price", null);
 
 async function fetchGutendexBooks(topic, count) {
   const results = [];
-  let url = `https://gutendex.com/books/?topic=${encodeURIComponent(topic)}&languages=en`;
+  const params = new URLSearchParams({ languages: "en" });
+  if (topic) params.set("topic", topic);
+  if (SORT)  params.set("sort", SORT);
+  let url = `https://gutendex.com/books/?${params}`;
   while (url && results.length < count) {
     const res = await fetch(url);
     if (!res.ok) throw new Error(`Gutendex error: ${res.status}`);
@@ -124,9 +129,9 @@ async function importOne(gb) {
   ]);
 
   // 3. Save metadata to MongoDB
-  // Always use the import TOPIC as genre so it matches the site's genre filter tabs.
-  // Gutenberg bookshelf names are arbitrary (e.g. "Harvard Classics") and won't match.
-  const genre = TOPIC;
+  // Always use GENRE (defaults to TOPIC) so it matches the site's genre filter tabs.
+  // The --genre flag lets importFamous.mjs override this per-run.
+  const genre = GENRE || "Other";
   const result = await createBookRecord({
     title,
     author,
