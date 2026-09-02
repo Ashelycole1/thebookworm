@@ -12,7 +12,7 @@ export async function GET() {
     // Fetch available books from the database
     // Using { $ne: false } so that older documents without the field default to being available
     // Note: fileStorageKey is excluded by default in the schema (select: false)
-    const dbBooks = await Book.find({ isAvailable: { $ne: false } }).sort({ createdAt: -1 });
+    const dbBooks = await Book.find({ isAvailable: { $ne: false } }).sort({ featured: -1, createdAt: 1 });
 
     // Map the database document to the format expected by the frontend Book interface.
     // The internal `price` field is a USD-equivalent: priceUGX / 300 (the UGX rate in currency.ts).

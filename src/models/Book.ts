@@ -56,6 +56,10 @@ const BookSchema = new Schema<IBook>(
       type: Boolean,
       default: true,
     },
+    featured: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,

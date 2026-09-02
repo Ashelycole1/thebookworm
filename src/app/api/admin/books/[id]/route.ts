@@ -55,7 +55,7 @@ export async function PATCH(
     } else {
       // JSON path: text fields only
       const body = await req.json();
-      const allowedFields = ["title", "author", "description", "priceUGX", "genre", "isAvailable"];
+      const allowedFields = ["title", "author", "description", "priceUGX", "genre", "isAvailable", "featured"];
       for (const field of allowedFields) {
         if (body[field] !== undefined) {
           update[field] = body[field];

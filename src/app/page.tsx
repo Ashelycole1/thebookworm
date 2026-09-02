@@ -13,7 +13,7 @@ const UGX_RATE = 300;
 /** Shared helper — fetch & map books from DB */
 async function fetchBooks(): Promise<Book[]> {
   await connectDB();
-  const dbBooks = await BookModel.find({ isAvailable: { $ne: false } }).sort({ createdAt: -1 }).lean();
+  const dbBooks = await BookModel.find({ isAvailable: { $ne: false } }).sort({ featured: -1, createdAt: 1 }).lean();
   return dbBooks.map((book) => ({
     id: (book._id as { toString(): string }).toString(),
     title: book.title,

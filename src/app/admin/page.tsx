@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import styles from "./admin.module.css";
-import { Upload, Book, FileText, ImageIcon, DollarSign, Tag, Pencil, Trash2, ToggleLeft, ToggleRight, Check, X, Link } from "lucide-react";
+import { Upload, Book, FileText, ImageIcon, DollarSign, Tag, Pencil, Trash2, ToggleLeft, ToggleRight, Check, X, Link, Star } from "lucide-react";
 
 const GENRES = [
   "Programming",
@@ -32,6 +32,7 @@ interface AdminBook {
   priceUGX: number;
   coverImageUrl: string;
   isAvailable: boolean;
+  featured: boolean;
   genre: string[];
 }
 
@@ -225,6 +226,15 @@ export default function AdminPage() {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ isAvailable: !current }),
+    });
+    fetchBooks();
+  }
+
+  async function toggleFeatured(id: string, current: boolean) {
+    await fetch(`/api/admin/books/${id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ featured: !current }),
     });
     fetchBooks();
   }
@@ -549,6 +559,14 @@ export default function AdminPage() {
                           title="Copy Download Link (valid for 24hrs)"
                         >
                           <Link size={16} />
+                        </button>
+                        <button
+                          className={`${styles.actionBtn}`}
+                          style={book.featured ? { color: "#E8B930", background: "#fef3c7" } : {}}
+                          onClick={() => toggleFeatured(book._id, book.featured)}
+                          title={book.featured ? "Unpin from top" : "Pin to top of store"}
+                        >
+                          <Star size={16} fill={book.featured ? "#E8B930" : "none"} />
                         </button>
                         <button
                           className={styles.actionBtn}
