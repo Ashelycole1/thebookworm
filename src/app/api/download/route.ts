@@ -86,9 +86,11 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     }
 
     // 3. Generate a temporary presigned URL valid for 15 minutes
+    const sanitizedTitle = book.title.replace(/[^a-zA-Z0-9 \-_]/g, '').trim();
     const command = new GetObjectCommand({
       Bucket: process.env.R2_BUCKET_NAME,
       Key: book.fileStorageKey,
+      ResponseContentDisposition: `attachment; filename="${sanitizedTitle}.pdf"`,
     });
 
     const downloadUrl = await getSignedUrl(r2, command, {

@@ -369,6 +369,7 @@ export default function NylonPayModal({
                     href={d.url}
                     target="_blank"
                     rel="noopener noreferrer"
+                    download
                     className="btn-black"
                     style={{
                       display: "block",
