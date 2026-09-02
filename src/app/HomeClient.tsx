@@ -158,6 +158,26 @@ export default function HomeClient({ initialBooks, initialBookId }: HomeClientPr
 
       <main>
         <Hero />
+        
+        <section className="container" style={{ padding: "0 24px" }}>
+          <div style={{ display: "flex", justifyContent: "center", gap: 32, padding: "24px", background: "var(--color-card)", margin: "0 auto 32px", maxWidth: 800, borderRadius: 16, border: "1px solid var(--color-border)" }}>
+            <div style={{ textAlign: "center", flex: 1 }}>
+              <div style={{ fontSize: "1.5rem", marginBottom: 8 }}>1️⃣</div>
+              <h3 style={{ fontSize: "0.95rem", fontWeight: 700, marginBottom: 4 }}>Select Book</h3>
+              <p style={{ fontSize: "0.85rem", color: "var(--color-ink-muted)", lineHeight: 1.4 }}>Find your desired book and add it to cart.</p>
+            </div>
+            <div style={{ textAlign: "center", flex: 1 }}>
+              <div style={{ fontSize: "1.5rem", marginBottom: 8 }}>2️⃣</div>
+              <h3 style={{ fontSize: "0.95rem", fontWeight: 700, marginBottom: 4 }}>Pay via MTN/Airtel</h3>
+              <p style={{ fontSize: "0.85rem", color: "var(--color-ink-muted)", lineHeight: 1.4 }}>Quick and secure Mobile Money payment.</p>
+            </div>
+            <div style={{ textAlign: "center", flex: 1 }}>
+              <div style={{ fontSize: "1.5rem", marginBottom: 8 }}>3️⃣</div>
+              <h3 style={{ fontSize: "0.95rem", fontWeight: 700, marginBottom: 4 }}>Download Instantly</h3>
+              <p style={{ fontSize: "0.85rem", color: "var(--color-ink-muted)", lineHeight: 1.4 }}>Get immediate access to your PDF.</p>
+            </div>
+          </div>
+        </section>
 
         <GenreFilter active={genre} onChange={setGenre} />
 

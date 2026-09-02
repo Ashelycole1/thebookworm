@@ -1,24 +1,21 @@
 "use client";
 
-import { Star } from "lucide-react";
+import { Award } from "lucide-react";
 
-interface RatingProps {
-  value: number;
-  size?: number;
-}
-
-export default function Rating({ value, size = 11 }: RatingProps) {
+export default function Rating() {
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: 3 }}>
-      <Star size={size} fill="var(--color-yellow)" color="var(--color-yellow)" strokeWidth={0} />
+    <div style={{ display: "flex", alignItems: "center", gap: 4, background: "var(--color-bg)", padding: "2px 6px", borderRadius: 4, border: "1px solid var(--color-border)" }}>
+      <Award size={12} color="var(--color-ink-muted)" />
       <span
         style={{
-          fontSize: size + 1,
+          fontSize: 10,
           color: "var(--color-ink-muted)",
-          fontWeight: 600,
+          fontWeight: 700,
+          textTransform: "uppercase",
+          letterSpacing: "0.05em"
         }}
       >
-        {value.toFixed(1)}
+        Hand-picked
       </span>
     </div>
   );

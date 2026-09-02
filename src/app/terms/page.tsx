@@ -18,16 +18,16 @@ export default function TermsPage() {
         </p>
         <div style={{ display: "flex", flexDirection: "column", gap: 24, lineHeight: 1.6 }}>
           <section>
-            <h2 style={{ fontSize: "1.2rem", fontWeight: 700, marginBottom: 12 }}>1. Acceptance of Terms</h2>
-            <p>By accessing and using The Bookworm, you accept and agree to be bound by the terms and provision of this agreement.</p>
+            <h2 style={{ fontSize: "1.2rem", fontWeight: 700, marginBottom: 12 }}>1. Digital Delivery & No Refunds</h2>
+            <p>Due to the digital nature of our products (instant PDF/EPUB downloads), <strong>all sales are final and non-refundable</strong>. Once a transaction is completed and the download link is provided, we cannot offer refunds unless the file itself is proven to be defective or corrupted.</p>
           </section>
           <section>
-            <h2 style={{ fontSize: "1.2rem", fontWeight: 700, marginBottom: 12 }}>2. License and Access</h2>
-            <p>We grant you a limited license to access and make personal use of this website. You may download purchased books for personal, non-commercial use only.</p>
+            <h2 style={{ fontSize: "1.2rem", fontWeight: 700, marginBottom: 12 }}>2. Mobile Money Payments</h2>
+            <p>Payments are processed securely via MTN Mobile Money and Airtel Money. You are responsible for ensuring the correct phone number is used for authorization. Your Mobile Money Transaction ID acts as your receipt and must be used to recover download links if you lose access to them.</p>
           </section>
           <section>
-            <h2 style={{ fontSize: "1.2rem", fontWeight: 700, marginBottom: 12 }}>3. Intellectual Property</h2>
-            <p>All content included on this site, such as text, graphics, logos, and digital downloads, is the property of The Bookworm or its content suppliers and protected by international copyright laws.</p>
+            <h2 style={{ fontSize: "1.2rem", fontWeight: 700, marginBottom: 12 }}>3. Personal Use License</h2>
+            <p>When you purchase a book from The Bookworm, you are granted a limited, non-exclusive license to download and read the content for personal use only. Reselling, distributing, or sharing the digital files publicly is strictly prohibited and violates our intellectual property rights.</p>
           </section>
         </div>
       </main>

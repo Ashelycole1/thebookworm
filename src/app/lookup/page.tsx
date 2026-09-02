@@ -88,9 +88,12 @@ export default function OrderLookupPage() {
               />
             </div>
             <div style={{ marginBottom: 24 }}>
-              <label style={{ display: "block", fontSize: "0.85rem", fontWeight: 700, marginBottom: 8, color: "var(--color-ink-muted)" }}>
+              <label style={{ display: "block", fontSize: "0.85rem", fontWeight: 700, marginBottom: 4, color: "var(--color-ink-muted)" }}>
                 TRANSACTION ID
               </label>
+              <p style={{ fontSize: "0.75rem", color: "var(--color-ink-muted)", marginBottom: 8 }}>
+                MTN: Starts with ID (e.g. 235123...). Airtel: Check "Txn Id" in SMS.
+              </p>
               <input
                 type="text"
                 value={transactionId}
