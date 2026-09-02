@@ -12,7 +12,12 @@ import DetailModal from "@/components/DetailModal";
 import CartDrawer from "@/components/CartDrawer";
 import NylonPayModal from "@/components/NylonPayModal";
 
-export default function HomeClient() {
+interface HomeClientProps {
+  initialBooks: Book[];
+  initialBookId?: string;
+}
+
+export default function HomeClient({ initialBooks, initialBookId }: HomeClientProps) {
   const currency = useCurrency();
 
   // Filter state
@@ -24,42 +29,23 @@ export default function HomeClient() {
   const [currentPage, setCurrentPage] = useState(1);
   const ITEMS_PER_PAGE = 12;
 
-  // Books state
-  const [books, setBooks] = useState<Book[]>([]);
-  const [loading, setLoading] = useState(true);
+  // Books state — seeded from server so they appear instantly
+  const [books] = useState<Book[]>(initialBooks);
 
   // Cart & wishlist
   const [cart, setCart] = useState<CartLine[]>([]);
   const [wishlist, setWishlist] = useState<(string | number)[]>([]);
   const [cartOpen, setCartOpen] = useState(false);
 
-  // Detail modal
-  const [selected, setSelected] = useState<Book | null>(null);
+  // Detail modal — open directly if a ?book= param was passed
+  const [selected, setSelected] = useState<Book | null>(
+    initialBookId
+      ? (initialBooks.find((b) => String(b.id) === initialBookId) ?? null)
+      : null
+  );
 
   // Nylon Pay
   const [nylonOpen, setNylonOpen] = useState(false);
-
-  // Fetch books on mount
-  useEffect(() => {
-    async function fetchBooks() {
-      try {
-        const res = await fetch("/api/books");
-        const data = await res.json();
-        setBooks(data);
-        const params = new URLSearchParams(window.location.search);
-        const bookId = params.get("book");
-        if (bookId) {
-          const b = data.find((x: Book) => String(x.id) === bookId);
-          if (b) setSelected(b);
-        }
-      } catch (e) {
-        console.error("Failed to fetch books", e);
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchBooks();
-  }, []);
 
   // Derived
   const filtered = useMemo(() => {
@@ -176,50 +162,38 @@ export default function HomeClient() {
         <GenreFilter active={genre} onChange={setGenre} />
 
         <section className="container section-gap" style={{ paddingBottom: 100 }}>
-          {loading ? (
-            <div className="grid">
-              {Array.from({ length: 8 }).map((_, i) => (
-                <div key={i} style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-                  <div style={{ aspectRatio: "2/3", background: "var(--color-border)", borderRadius: 16, animation: "pulse 1.5s infinite ease-in-out" }} />
-                  <div style={{ height: 16, background: "var(--color-border)", borderRadius: 4, width: "80%", animation: "pulse 1.5s infinite ease-in-out" }} />
-                  <div style={{ height: 14, background: "var(--color-border)", borderRadius: 4, width: "50%", animation: "pulse 1.5s infinite ease-in-out" }} />
-                </div>
-              ))}
-            </div>
-          ) : (
-            <>
-              <BookGrid
-                books={paginatedBooks}
-                wishlist={wishlist}
-                onToggleWishlist={toggleWishlist}
-                onSelect={openDetail}
-                currency={currency}
-              />
-              
-              {/* Pagination Controls */}
-              {totalPages > 1 && (
-                <div className="pagination-wrap">
-                  <button 
-                    className="pagination-btn"
-                    disabled={currentPage === 1}
-                    onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-                  >
-                    Previous
-                  </button>
-                  <span className="pagination-info">
-                    Page {currentPage} of {totalPages}
-                  </span>
-                  <button 
-                    className="pagination-btn"
-                    disabled={currentPage === totalPages}
-                    onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
-                  >
-                    Next
-                  </button>
-                </div>
-              )}
-            </>
-          )}
+          <>
+            <BookGrid
+              books={paginatedBooks}
+              wishlist={wishlist}
+              onToggleWishlist={toggleWishlist}
+              onSelect={openDetail}
+              currency={currency}
+            />
+
+            {/* Pagination Controls */}
+            {totalPages > 1 && (
+              <div className="pagination-wrap">
+                <button
+                  className="pagination-btn"
+                  disabled={currentPage === 1}
+                  onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                >
+                  Previous
+                </button>
+                <span className="pagination-info">
+                  Page {currentPage} of {totalPages}
+                </span>
+                <button
+                  className="pagination-btn"
+                  disabled={currentPage === totalPages}
+                  onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                >
+                  Next
+                </button>
+              </div>
+            )}
+          </>
         </section>
       </main>
 
