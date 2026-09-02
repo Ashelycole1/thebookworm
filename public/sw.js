@@ -1,5 +1,5 @@
-const CACHE_NAME = "thebookworm-v1";
-const RUNTIME_CACHE = "thebookworm-runtime-v1";
+const CACHE_NAME = "thebookworm-v2";
+const RUNTIME_CACHE = "thebookworm-runtime-v2";
 
 const PRECACHE_URLS = [
   "/",
@@ -8,7 +8,8 @@ const PRECACHE_URLS = [
   "/favicon-32x32.png",
   "/favicon-16x16.png",
   "/apple-touch-icon.png",
-  "/bookworm-logo.png"
+  "/pwa-192.png",
+  "/pwa-512.png"
 ];
 
 self.addEventListener("install", (event) => {
