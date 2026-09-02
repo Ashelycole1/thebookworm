@@ -5,9 +5,11 @@ import { useState, useMemo, useCallback, useEffect } from "react";
 import { Book, CartLine, Genre } from "@/types";
 import { useCurrency } from "@/hooks/useCurrency";
 import Header from "@/components/Header";
-import Hero from "@/components/Hero";
+import Hero from "../components/Hero";
 import GenreFilter from "@/components/GenreFilter";
 import BookGrid from "@/components/BookGrid";
+import BookList from "@/components/BookList";
+import ViewTabs from "@/components/ViewTabs";
 import DetailModal from "@/components/DetailModal";
 import CartDrawer from "@/components/CartDrawer";
 import NylonPayModal from "@/components/NylonPayModal";
@@ -77,6 +79,8 @@ export default function HomeClient({ initialBooks, initialBookId }: HomeClientPr
   const totalPages = Math.ceil(filtered.length / ITEMS_PER_PAGE);
 
   const cartCount = cart.reduce((sum, c) => sum + c.qty, 0);
+
+  const [view, setView] = useState<"grid" | "list">("grid");
 
   const selectedTotal = useMemo(() => {
     return cart
@@ -163,13 +167,26 @@ export default function HomeClient({ initialBooks, initialBookId }: HomeClientPr
 
         <section className="container section-gap" style={{ paddingBottom: 100 }}>
           <>
-            <BookGrid
-              books={paginatedBooks}
-              wishlist={wishlist}
-              onToggleWishlist={toggleWishlist}
-              onSelect={openDetail}
-              currency={currency}
-            />
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, marginBottom: 12 }}>
+              <ViewTabs view={view} onChange={setView} />
+            </div>
+            {view === 'grid' ? (
+              <BookGrid
+                books={paginatedBooks}
+                wishlist={wishlist}
+                onToggleWishlist={toggleWishlist}
+                onSelect={openDetail}
+                currency={currency}
+              />
+            ) : (
+              <BookList
+                books={paginatedBooks}
+                wishlist={wishlist}
+                onToggleWishlist={toggleWishlist}
+                onSelect={openDetail}
+                currency={currency}
+              />
+            )}
 
             {/* Pagination Controls */}
             {totalPages > 1 && (

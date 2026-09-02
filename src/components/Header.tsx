@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { Search, ShoppingBag, X } from "lucide-react";
 
 interface HeaderProps {
@@ -22,9 +23,7 @@ export default function Header({
 }: HeaderProps) {
   return (
     <header className="site-header">
-      <div className="container header-inner">
-
-        {/* ── Brand ── */}
+      <div className="header-inner">
         <div className="header-brand">
           <div className="header-logo-ring">
             <Image
@@ -33,19 +32,25 @@ export default function Header({
               width={34}
               height={34}
               priority
-              style={{ width: 34, height: "auto", display: "block" }}
+              style={{ width: 34, height: 'auto', display: 'block' }}
             />
           </div>
           <div className="header-brand-text">
             <span className="header-wordmark">The Bookworm</span>
-            <span className="header-tagline">Books · Resources · Growth</span>
+            <span className="header-tagline">Books. Resources. Growth.</span>
           </div>
         </div>
 
-        {/* ── Actions ── */}
+        <nav className="header-nav" aria-label="Primary navigation">
+          <ul className="nav-list">
+            <li><Link href="/" className="nav-link">Browse</Link></li>
+            <li><Link href="/lookup" className="nav-link">Lookup</Link></li>
+            <li><Link href="/terms" className="nav-link">Terms</Link></li>
+          </ul>
+        </nav>
+
         <div className="header-actions">
-          {/* Expanding search */}
-          <div className={`header-search-wrap${searchOpen ? " open" : ""}`}>
+          <div className={`header-search-wrap${searchOpen ? ' open' : ''}`}>
             {searchOpen && (
               <input
                 className="header-search-input"
@@ -60,34 +65,24 @@ export default function Header({
             <button
               className="header-icon-btn"
               onClick={onSearchToggle}
-              aria-label={searchOpen ? "Close search" : "Open search"}
+              aria-label={searchOpen ? 'Close search' : 'Open search'}
             >
-              {searchOpen ? (
-                <X size={17} strokeWidth={2} />
-              ) : (
-                <Search size={17} strokeWidth={2} />
-              )}
+              {searchOpen ? <X size={17} strokeWidth={2} /> : <Search size={17} strokeWidth={2} />}
             </button>
           </div>
 
-          {/* Cart */}
           <button
             className="header-cart-btn"
             onClick={onCartOpen}
-            aria-label={`Open cart${cartCount > 0 ? `, ${cartCount} items` : ""}`}
+            aria-label={`Open cart${cartCount > 0 ? `, ${cartCount} items` : ''}`}
           >
             <ShoppingBag size={17} strokeWidth={2} />
-            {cartCount > 0 ? (
-              <span className="header-cart-label">{cartCount} item{cartCount > 1 ? "s" : ""}</span>
-            ) : (
-              <span className="header-cart-label">Cart</span>
-            )}
-            {cartCount > 0 && (
-              <span className="cart-badge" aria-hidden="true">{cartCount}</span>
-            )}
+            <span className="header-cart-label">{cartCount > 0 ? `${cartCount} item${cartCount > 1 ? 's' : ''}` : 'Cart'}</span>
+            {cartCount > 0 && <span className="cart-badge" aria-hidden="true">{cartCount}</span>}
           </button>
         </div>
       </div>
     </header>
   );
 }
+ 
