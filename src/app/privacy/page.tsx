@@ -1,13 +1,18 @@
 import React from "react";
+import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
 
 export default function PrivacyPage() {
   return (
     <div style={{ background: "var(--color-bg)", minHeight: "100vh" }}>
       <header className="site-header" style={{ padding: "14px 24px" }}>
-        <div className="container" style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <a href="/" style={{ textDecoration: "none", color: "var(--color-ink)", fontWeight: 800, fontSize: "1.2rem" }}>
+        <div className="container" style={{ display: "flex", alignItems: "center", gap: 16 }}>
+          <Link href="/" className="icon-circle" aria-label="Go back home">
+            <ArrowLeft size={18} />
+          </Link>
+          <Link href="/" style={{ textDecoration: "none", color: "var(--color-ink)", fontWeight: 800, fontSize: "1.2rem" }}>
             The Bookworm
-          </a>
+          </Link>
         </div>
       </header>
       <main className="container" style={{ paddingTop: 60, paddingBottom: 80, maxWidth: 800 }}>

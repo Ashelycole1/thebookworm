@@ -162,17 +162,17 @@ export default function HomeClient({ initialBooks, initialBookId }: HomeClientPr
         <section className="container" style={{ padding: "0 24px" }}>
           <div style={{ display: "flex", justifyContent: "center", gap: 32, padding: "24px", background: "var(--color-card)", margin: "0 auto 32px", maxWidth: 800, borderRadius: 16, border: "1px solid var(--color-border)" }}>
             <div style={{ textAlign: "center", flex: 1 }}>
-              <div style={{ fontSize: "1.5rem", marginBottom: 8 }}>1️⃣</div>
+              <div style={{ background: "#0ea5e9", color: "white", width: 24, height: 24, display: "flex", alignItems: "center", justifyContent: "center", borderRadius: 4, fontSize: "0.9rem", fontWeight: 800, margin: "0 auto 12px" }}>1</div>
               <h3 style={{ fontSize: "0.95rem", fontWeight: 700, marginBottom: 4 }}>Select Book</h3>
               <p style={{ fontSize: "0.85rem", color: "var(--color-ink-muted)", lineHeight: 1.4 }}>Find your desired book and add it to cart.</p>
             </div>
             <div style={{ textAlign: "center", flex: 1 }}>
-              <div style={{ fontSize: "1.5rem", marginBottom: 8 }}>2️⃣</div>
+              <div style={{ background: "#0ea5e9", color: "white", width: 24, height: 24, display: "flex", alignItems: "center", justifyContent: "center", borderRadius: 4, fontSize: "0.9rem", fontWeight: 800, margin: "0 auto 12px" }}>2</div>
               <h3 style={{ fontSize: "0.95rem", fontWeight: 700, marginBottom: 4 }}>Pay via MTN/Airtel</h3>
               <p style={{ fontSize: "0.85rem", color: "var(--color-ink-muted)", lineHeight: 1.4 }}>Quick and secure Mobile Money payment.</p>
             </div>
             <div style={{ textAlign: "center", flex: 1 }}>
-              <div style={{ fontSize: "1.5rem", marginBottom: 8 }}>3️⃣</div>
+              <div style={{ background: "#0ea5e9", color: "white", width: 24, height: 24, display: "flex", alignItems: "center", justifyContent: "center", borderRadius: 4, fontSize: "0.9rem", fontWeight: 800, margin: "0 auto 12px" }}>3</div>
               <h3 style={{ fontSize: "0.95rem", fontWeight: 700, marginBottom: 4 }}>Download Instantly</h3>
               <p style={{ fontSize: "0.85rem", color: "var(--color-ink-muted)", lineHeight: 1.4 }}>Get immediate access to your PDF.</p>
             </div>
@@ -231,11 +231,11 @@ export default function HomeClient({ initialBooks, initialBookId }: HomeClientPr
             <span className="footer-copyright">
               &copy; 2026 The Bookworm
             </span>
-            <div className="footer-links">
-              <Link href="/lookup">Find My Books</Link>
-              <a href="/terms">Terms of Use</a>
-              <a href="/privacy">Privacy Policy</a>
-              <a href="/disclaimer">Disclaimers</a>
+            <div className="footer-links" style={{ display: "flex", gap: "32px", justifyContent: "center", fontWeight: 500, fontSize: "1rem", marginTop: "16px" }}>
+              <Link href="/lookup" style={{ color: "var(--color-ink)", textDecoration: "none" }}>Find My Books</Link>
+              <a href="/terms" style={{ color: "var(--color-ink)", textDecoration: "none" }}>Terms of Use</a>
+              <a href="/privacy" style={{ color: "var(--color-ink)", textDecoration: "none" }}>Privacy Policy</a>
+              <a href="/disclaimer" style={{ color: "var(--color-ink)", textDecoration: "none" }}>Disclaimers</a>
             </div>
             <span className="footer-credit">
               Made by <a href="https://www.linkedin.com/company/renoa-collective/" target="_blank" rel="noopener noreferrer">RENOA</a>
