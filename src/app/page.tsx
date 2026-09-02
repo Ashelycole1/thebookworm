@@ -46,6 +46,12 @@ export default function Home() {
         const res = await fetch("/api/books");
         const data = await res.json();
         setBooks(data);
+        const params = new URLSearchParams(window.location.search);
+        const bookId = params.get("book");
+        if (bookId) {
+          const b = data.find((x: Book) => String(x.id) === bookId);
+          if (b) setSelected(b);
+        }
       } catch (e) {
         console.error("Failed to fetch books", e);
       } finally {

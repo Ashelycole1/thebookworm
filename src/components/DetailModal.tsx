@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
-import { X, ChevronLeft, Plus, Minus, Check } from "lucide-react";
+import { X, ChevronLeft, Plus, Minus, Check, Share2, CopyCheck } from "lucide-react";
 import { Book, Format, CurrencyConfig } from "@/types";
 import Cover from "./Cover";
 import Rating from "./Rating";
@@ -27,10 +27,24 @@ export default function DetailModal({
   const [selectedFormat, setSelectedFormat] = useState<Format>(book.formats[0]);
   const [qty, setQty] = useState(1);
   const [justAdded, setJustAdded] = useState(false);
+  const [copied, setCopied] = useState(false);
   const closeRef = useRef<HTMLButtonElement>(null);
   const firstFocusRef = useRef<HTMLButtonElement>(null);
 
-
+  function handleShare() {
+    const url = `${window.location.origin}/?book=${book.id}`;
+    if (navigator.share) {
+      navigator.share({
+        title: book.title,
+        text: `Check out ${book.title} on The Bookworm!`,
+        url: url,
+      }).catch((e) => console.log("Share failed", e));
+    } else {
+      navigator.clipboard.writeText(url);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  }
 
   // Escape key to close
   useEffect(() => {
@@ -112,15 +126,25 @@ export default function DetailModal({
           <div className="rating">
             <span>★</span> {book.rating.toFixed(1)}
           </div>
-        </div>
-          <button
-            ref={closeRef}
-            className="icon-circle"
-            onClick={onClose}
-            aria-label="Close"
-          >
-            <X size={16} strokeWidth={2.2} />
-          </button>
+          </div>
+          <div style={{ display: "flex", gap: "8px" }}>
+            <button
+              className="icon-circle"
+              onClick={handleShare}
+              aria-label={copied ? "Link copied" : "Share"}
+              style={copied ? { color: "var(--color-green)" } : undefined}
+            >
+              {copied ? <CopyCheck size={16} strokeWidth={2.2} /> : <Share2 size={16} strokeWidth={2.2} />}
+            </button>
+            <button
+              ref={closeRef}
+              className="icon-circle"
+              onClick={onClose}
+              aria-label="Close"
+            >
+              <X size={16} strokeWidth={2.2} />
+            </button>
+          </div>
         </div>
 
         {/* Body */}
