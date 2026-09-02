@@ -263,6 +263,8 @@ export default function Home() {
         <NylonPayModal
           total={selectedTotal}
           currency={currency}
+          cart={cart.filter(c => c.checked)}
+          books={books}
           onClose={() => setNylonOpen(false)}
           onSuccess={handlePaySuccess}
         />
