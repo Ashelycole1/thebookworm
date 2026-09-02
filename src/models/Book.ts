@@ -14,6 +14,7 @@ export interface IBook extends Document {
   fileStorageKey: string; // Private: excluded by default in queries
   genre: string[];
   isAvailable: boolean;
+  featured: boolean;
   createdAt: Date;
   updatedAt: Date;
 }
