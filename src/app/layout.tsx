@@ -20,7 +20,22 @@ export const metadata: Metadata = {
   title: "The Bookworm",
   description:
     "Your one-stop shop for digital books. No subscriptions, no shipping — buy once, download instantly, keep forever.",
-  keywords: ["books", "ebooks", "digital books", "buy books online"],
+  keywords: [
+    "books",
+    "ebooks",
+    "digital books",
+    "buy books online",
+    "online library",
+    "read online",
+    "download books",
+    "classic literature",
+    "fiction",
+    "nonfiction",
+    "programming books",
+    "science fiction",
+    "public domain books",
+    "The Bookworm",
+  ],
   manifest: "/manifest.webmanifest",
   appleWebApp: {
     capable: true,
