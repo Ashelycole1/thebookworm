@@ -164,21 +164,23 @@ export default function HomeClient({ initialBooks, initialBookId }: HomeClientPr
         <Hero />
         
         <section className="container" style={{ padding: "0 24px" }}>
-          <div style={{ display: "flex", justifyContent: "center", gap: 32, padding: "24px", background: "var(--color-card)", margin: "0 auto 32px", maxWidth: 800, borderRadius: 16, border: "1px solid var(--color-border)" }}>
-            <div style={{ textAlign: "center", flex: 1 }}>
-              <div style={{ background: "#0ea5e9", color: "white", width: 24, height: 24, display: "flex", alignItems: "center", justifyContent: "center", borderRadius: 4, fontSize: "0.9rem", fontWeight: 800, margin: "0 auto 12px" }}>1</div>
-              <h3 style={{ fontSize: "0.95rem", fontWeight: 700, marginBottom: 4 }}>Select Book</h3>
-              <p style={{ fontSize: "0.85rem", color: "var(--color-ink-muted)", lineHeight: 1.4 }}>Find your desired book and add it to cart.</p>
+          <div className="how-steps">
+            <div className="how-step">
+              <div className="step-badge">1</div>
+              <h3 className="step-title">Select Book</h3>
+              <p className="step-desc">Find your desired book and add it to cart.</p>
             </div>
-            <div style={{ textAlign: "center", flex: 1 }}>
-              <div style={{ background: "#0ea5e9", color: "white", width: 24, height: 24, display: "flex", alignItems: "center", justifyContent: "center", borderRadius: 4, fontSize: "0.9rem", fontWeight: 800, margin: "0 auto 12px" }}>2</div>
-              <h3 style={{ fontSize: "0.95rem", fontWeight: 700, marginBottom: 4 }}>Pay via MTN/Airtel</h3>
-              <p style={{ fontSize: "0.85rem", color: "var(--color-ink-muted)", lineHeight: 1.4 }}>Quick and secure Mobile Money payment.</p>
+
+            <div className="how-step">
+              <div className="step-badge">2</div>
+              <h3 className="step-title">Pay via MTN/Airtel</h3>
+              <p className="step-desc">Quick and secure Mobile Money payment.</p>
             </div>
-            <div style={{ textAlign: "center", flex: 1 }}>
-              <div style={{ background: "#0ea5e9", color: "white", width: 24, height: 24, display: "flex", alignItems: "center", justifyContent: "center", borderRadius: 4, fontSize: "0.9rem", fontWeight: 800, margin: "0 auto 12px" }}>3</div>
-              <h3 style={{ fontSize: "0.95rem", fontWeight: 700, marginBottom: 4 }}>Download Instantly</h3>
-              <p style={{ fontSize: "0.85rem", color: "var(--color-ink-muted)", lineHeight: 1.4 }}>Get immediate access to your PDF.</p>
+
+            <div className="how-step">
+              <div className="step-badge">3</div>
+              <h3 className="step-title">Download Instantly</h3>
+              <p className="step-desc">Get immediate access to your PDF.</p>
             </div>
           </div>
         </section>
