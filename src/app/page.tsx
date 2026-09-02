@@ -52,6 +52,8 @@ export async function generateMetadata(
           title: `${book.title} | The Bookworm`,
           description,
           openGraph: {
+            // Ensure crawlers associate the card with a canonical link
+            url: `${siteUrl}/?book=${bookId}`,
             title: book.title as string,
             description,
             images: [{ url: ogImageUrl, width: 800, height: 1200, alt: book.title as string }],

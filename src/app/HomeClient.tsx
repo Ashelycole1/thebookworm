@@ -142,6 +142,12 @@ export default function HomeClient({ initialBooks, initialBookId }: HomeClientPr
     setCart([]);
   }
 
+  // Buy single book immediately: prefill cart and open payment modal
+  const buyNow = useCallback((book: Book, qty = 1) => {
+    setCart([{ id: book.id, qty, checked: true }]);
+    setNylonOpen(true);
+  }, []);
+
   function handleSearchToggle() {
     setSearchOpen((s) => {
       if (s) setQuery(""); // clear on close
@@ -162,28 +168,6 @@ export default function HomeClient({ initialBooks, initialBookId }: HomeClientPr
 
       <main>
         <Hero />
-        
-        <section className="container" style={{ padding: "0 24px" }}>
-          <div className="how-steps">
-            <div className="how-step">
-              <div className="step-badge">1</div>
-              <h3 className="step-title">Select Book</h3>
-              <p className="step-desc">Find your desired book and add it to cart.</p>
-            </div>
-
-            <div className="how-step">
-              <div className="step-badge">2</div>
-              <h3 className="step-title">Pay via MTN/Airtel</h3>
-              <p className="step-desc">Quick and secure Mobile Money payment.</p>
-            </div>
-
-            <div className="how-step">
-              <div className="step-badge">3</div>
-              <h3 className="step-title">Download Instantly</h3>
-              <p className="step-desc">Get immediate access to your PDF.</p>
-            </div>
-          </div>
-        </section>
 
         <GenreFilter active={genre} onChange={setGenre} />
 
@@ -270,6 +254,7 @@ export default function HomeClient({ initialBooks, initialBookId }: HomeClientPr
           wishlist={wishlist}
           onToggleWishlist={toggleWishlist}
           onAddToCart={addToCart}
+          onBuyNow={buyNow}
           onClose={closeDetail}
           currency={currency}
         />

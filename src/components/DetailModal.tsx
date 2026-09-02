@@ -12,6 +12,7 @@ interface DetailModalProps {
   wishlist: (string | number)[];
   onToggleWishlist: (id: string | number) => void;
   onAddToCart: (book: Book, qty: number) => void;
+  onBuyNow?: (book: Book, qty?: number) => void;
   onClose: () => void;
   currency: CurrencyConfig;
 }
@@ -21,6 +22,7 @@ export default function DetailModal({
   wishlist,
   onToggleWishlist,
   onAddToCart,
+  onBuyNow,
   onClose,
   currency,
 }: DetailModalProps) {
@@ -88,6 +90,16 @@ export default function DetailModal({
     onAddToCart(book, qty);
     setJustAdded(true);
     setTimeout(() => setJustAdded(false), 1200);
+  }
+
+  function handleBuyNow() {
+    // Prefill and open payment in parent
+    try {
+      onBuyNow?.(book, qty);
+      onClose();
+    } catch (e) {
+      console.error("Buy now failed", e);
+    }
   }
 
   return (
@@ -262,7 +274,8 @@ export default function DetailModal({
             </div>
 
             {/* Add to cart */}
-            <button
+            <div style={{ display: 'flex', gap: 12, marginTop: 20 }} className="detail-cta-row">
+              <button
               className="btn-black"
               onClick={handleAdd}
               style={{
@@ -270,7 +283,6 @@ export default function DetailModal({
                 padding: "14px",
                 fontSize: "0.85rem",
                 borderRadius: 999,
-                marginTop: 20,
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
@@ -287,6 +299,26 @@ export default function DetailModal({
                 "ADD TO CART"
               )}
             </button>
+            
+              <button
+                className="btn-primary"
+                onClick={handleBuyNow}
+                style={{
+                  padding: "14px",
+                  fontSize: "0.85rem",
+                  borderRadius: 999,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: 8,
+                  letterSpacing: "0.02em",
+                  minWidth: 160,
+                }}
+                aria-label="Buy now"
+              >
+                BUY NOW
+              </button>
+            </div>
           </div>
         </div>
       </div>
