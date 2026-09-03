@@ -1668,6 +1668,117 @@ body {
   letter-spacing: -0.01em;
 }
 
+.legal-shell {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top, rgba(232, 185, 48, 0.12), transparent 28%),
+    linear-gradient(180deg, var(--color-bg) 0%, #f7f7f2 100%);
+}
+
+.legal-page {
+  max-width: 920px;
+  padding-top: 54px;
+  padding-bottom: 80px;
+}
+
+.legal-hero {
+  padding: 28px 26px 18px;
+  margin-bottom: 24px;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(30, 30, 28, 0.06);
+  border-radius: 24px;
+  box-shadow: 0 18px 42px -28px rgba(30, 30, 28, 0.18);
+}
+
+.legal-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-green);
+}
+
+.legal-kicker::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-green);
+  display: inline-block;
+}
+
+.legal-page-title {
+  margin: 0;
+  font-size: clamp(2.2rem, 5vw, 3.3rem);
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+  color: var(--color-ink);
+}
+
+.legal-updated {
+  margin-top: 14px;
+  color: var(--color-ink-muted);
+  font-size: 0.92rem;
+  font-weight: 600;
+}
+
+.legal-content {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.legal-card {
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid rgba(30, 30, 28, 0.06);
+  border-radius: 22px;
+  padding: 22px 20px 18px;
+  box-shadow: 0 16px 32px -26px rgba(30, 30, 28, 0.18);
+}
+
+.legal-card h2 {
+  margin: 0 0 12px;
+  font-size: 1.08rem;
+  font-weight: 800;
+  color: var(--color-ink);
+  letter-spacing: -0.02em;
+}
+
+.legal-card p {
+  margin: 0;
+  color: var(--color-ink);
+  line-height: 1.72;
+  font-weight: 500;
+}
+
+.legal-card strong {
+  color: var(--color-ink);
+}
+
+.legal-card ul {
+  margin: 0;
+  padding-left: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  color: var(--color-ink);
+  line-height: 1.7;
+}
+
+@media (min-width: 640px) {
+  .legal-hero {
+    padding: 32px 28px 22px;
+  }
+
+  .legal-card {
+    padding: 26px 26px 22px;
+  }
+}
+
 .detail-qty-row {
   display: flex;
   align-items: center;

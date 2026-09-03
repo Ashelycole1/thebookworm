@@ -4,7 +4,7 @@ import { ArrowLeft } from "lucide-react";
 
 export default function DisclaimerPage() {
   return (
-    <div style={{ background: "var(--color-bg)", minHeight: "100vh" }}>
+    <div className="legal-shell">
       <header className="site-header" style={{ padding: "14px 24px" }}>
         <div className="container" style={{ display: "flex", alignItems: "center", gap: 16 }}>
           <Link href="/" className="icon-circle" aria-label="Go back home">
@@ -15,19 +15,23 @@ export default function DisclaimerPage() {
           </Link>
         </div>
       </header>
-      <main className="container" style={{ paddingTop: 60, paddingBottom: 80, maxWidth: 800 }}>
-        <h1 style={{ fontSize: "2.5rem", fontWeight: 800, marginBottom: 24 }}>Disclaimers</h1>
-        <p style={{ color: "var(--color-ink-muted)", marginBottom: 40, lineHeight: 1.6 }}>
-          Last updated: August 2026
-        </p>
-        <div style={{ display: "flex", flexDirection: "column", gap: 24, lineHeight: 1.6 }}>
-          <section>
-            <h2 style={{ fontSize: "1.2rem", fontWeight: 700, marginBottom: 12 }}>1. General Disclaimer</h2>
-            <p>The information provided by The Bookworm on this website is for general informational purposes only. All information on the site is provided in good faith.</p>
+
+      <main className="container legal-page">
+        <div className="legal-hero">
+          <div className="legal-kicker">Important notice</div>
+          <h1 className="legal-page-title">Disclaimers</h1>
+          <p className="legal-updated">Last updated: August 2026</p>
+        </div>
+
+        <div className="legal-content">
+          <section className="legal-card">
+            <h2>1. General Disclaimer</h2>
+            <p>The information made available by The Bookworm is for general informational purposes only. While we do our best to maintain accuracy and relevance, we cannot guarantee that all content is complete, error-free, or current at all times.</p>
           </section>
-          <section>
-            <h2 style={{ fontSize: "1.2rem", fontWeight: 700, marginBottom: 12 }}>2. External Links Disclaimer</h2>
-            <p>The site may contain links to other websites or content belonging to or originating from third parties. Such external links are not investigated, monitored, or checked for accuracy, adequacy, validity, reliability, availability, or completeness by us.</p>
+
+          <section className="legal-card">
+            <h2>2. External Links Disclaimer</h2>
+            <p>The platform may contain links to third-party websites, publications, or resources. These links are provided for convenience and informational value only. We do not guarantee the accuracy, reliability, safety, or completeness of information on external sites and are not responsible for their content.</p>
           </section>
         </div>
       </main>

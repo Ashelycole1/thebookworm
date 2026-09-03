@@ -5,7 +5,7 @@ import Header from "@/components/Header";
 
 export default function TermsPage() {
   return (
-    <div style={{ background: "var(--color-bg)", minHeight: "100vh" }}>
+    <div className="legal-shell">
       <header className="site-header" style={{ padding: "14px 24px" }}>
         <div className="container" style={{ display: "flex", alignItems: "center", gap: 16 }}>
           <Link href="/" className="icon-circle" aria-label="Go back home">
@@ -16,23 +16,28 @@ export default function TermsPage() {
           </Link>
         </div>
       </header>
-      <main className="container" style={{ paddingTop: 60, paddingBottom: 80, maxWidth: 800 }}>
-        <h1 style={{ fontSize: "2.5rem", fontWeight: 800, marginBottom: 24 }}>Terms of Use</h1>
-        <p style={{ color: "var(--color-ink-muted)", marginBottom: 40, lineHeight: 1.6 }}>
-          Last updated: August 2026
-        </p>
-        <div style={{ display: "flex", flexDirection: "column", gap: 24, lineHeight: 1.6 }}>
-          <section>
-            <h2 style={{ fontSize: "1.2rem", fontWeight: 700, marginBottom: 12 }}>1. Digital Delivery & No Refunds</h2>
-            <p>Due to the digital nature of our products (instant PDF/EPUB downloads), <strong>all sales are final and non-refundable</strong>. Once a transaction is completed and the download link is provided, we cannot offer refunds unless the file itself is proven to be defective or corrupted.</p>
+
+      <main className="container legal-page">
+        <div className="legal-hero">
+          <div className="legal-kicker">The Bookworm</div>
+          <h1 className="legal-page-title">Terms of Use</h1>
+          <p className="legal-updated">Last updated: August 2026</p>
+        </div>
+
+        <div className="legal-content">
+          <section className="legal-card">
+            <h2>1. Digital Delivery & No Refunds</h2>
+            <p>Due to the digital nature of our products, including instant PDF and EPUB downloads, <strong>all sales are final and non-refundable</strong>. Once a purchase is completed and the file is delivered, refunds are only possible if the product is proven defective, corrupted, or materially different from the description.</p>
           </section>
-          <section>
-            <h2 style={{ fontSize: "1.2rem", fontWeight: 700, marginBottom: 12 }}>2. Mobile Money Payments</h2>
-            <p>Payments are processed securely via MTN Mobile Money and Airtel Money. You are responsible for ensuring the correct phone number is used for authorization. Your Mobile Money Transaction ID acts as your receipt and must be used to recover download links if you lose access to them.</p>
+
+          <section className="legal-card">
+            <h2>2. Mobile Money Payments</h2>
+            <p>Payments are processed through secure Mobile Money channels. You are responsible for confirming the correct phone number and transaction details before approval. Your transaction reference acts as your receipt and should be retained in case you need help retrieving your purchase.</p>
           </section>
-          <section>
-            <h2 style={{ fontSize: "1.2rem", fontWeight: 700, marginBottom: 12 }}>3. Personal Use License</h2>
-            <p>When you purchase a book from The Bookworm, you are granted a limited, non-exclusive license to download and read the content for personal use only. Reselling, distributing, or sharing the digital files publicly is strictly prohibited and violates our intellectual property rights.</p>
+
+          <section className="legal-card">
+            <h2>3. Personal Use License</h2>
+            <p>When you purchase a book from The Bookworm, you receive a limited, non-exclusive license to access and read the material for personal use only. Reselling, redistributing, or publicly sharing digital files is prohibited and may result in loss of access and enforcement action.</p>
           </section>
         </div>
       </main>
