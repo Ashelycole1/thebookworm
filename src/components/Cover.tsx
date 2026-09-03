@@ -6,7 +6,7 @@ import { palette } from "@/data/books";
 
 interface CoverProps {
   book: Book;
-  size?: "grid" | "detail";
+  size?: "grid" | "detail" | "mini";
   wishlisted?: boolean;
   onToggleWishlist?: (id: string | number) => void;
 }
@@ -20,9 +20,9 @@ export default function Cover({
   // We can hash the string ID to get a stable color palette index
   const idNum = typeof book.id === 'string' ? book.id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0) : book.id;
   const p = palette(idNum);
-  const titleSize = size === "grid" ? "1rem" : "1.5rem";
-  const authorSize = size === "grid" ? "0.72rem" : "0.85rem";
-  const padding = size === "grid" ? "16% 16%" : "12% 12%";
+  const titleSize = size === "detail" ? "1.5rem" : size === "mini" ? "0.82rem" : "1rem";
+  const authorSize = size === "detail" ? "0.85rem" : size === "mini" ? "0.62rem" : "0.72rem";
+  const padding = size === "detail" ? "12% 12%" : size === "mini" ? "18% 12%" : "16% 16%";
 
   return (
     <div
