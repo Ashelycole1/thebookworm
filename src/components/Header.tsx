@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Search, ShoppingBag, X } from "lucide-react";
+import { normalizeWhatsAppLink } from "@/lib/whatsapp";
 
 interface HeaderProps {
   cartCount: number;
@@ -21,7 +22,11 @@ export default function Header({
   query,
   onQueryChange,
 }: HeaderProps) {
-  const whatsappLink = process.env.NEXT_PUBLIC_WHATSAPP_LINK ?? "https://chat.whatsapp.com/your-community-code";
+  const whatsappLink = normalizeWhatsAppLink(
+    process.env.NEXT_PUBLIC_WHATSAPP_LINK ??
+      process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ??
+      "15551234567"
+  );
   return (
     <header className="site-header">
       <div className="header-inner">

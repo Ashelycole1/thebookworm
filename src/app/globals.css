@@ -1010,29 +1010,108 @@ body {
 /* WhatsApp floating action button */
 .whatsapp-fab {
   position: fixed;
-  left: 18px;
+  right: 18px;
   bottom: 18px;
-  width: 52px;
-  height: 52px;
-  border-radius: 999px;
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
   background: #25D366; /* WhatsApp green */
   color: #fff;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 12px 36px -12px rgba(6,40,12,0.36);
+  box-shadow: 0 18px 42px -18px rgba(6,40,12,0.48);
   z-index: 80;
   text-decoration: none;
-  transition: transform 0.12s ease, box-shadow 0.12s ease;
+  transition: transform 0.16s ease, box-shadow 0.16s ease, filter 0.16s ease;
+  border: 3px solid rgba(255,255,255,0.7);
+  animation: whatsappPulse 2.4s ease-in-out infinite;
 }
 
-.whatsapp-fab:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 18px 48px -18px rgba(6,40,12,0.4);
+.whatsapp-fab::after {
+  content: "Chat on WhatsApp";
+  position: absolute;
+  right: 68px;
+  top: 50%;
+  transform: translateY(-50%) translateX(8px);
+  opacity: 0;
+  pointer-events: none;
+  background: rgba(19, 25, 28, 0.92);
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  box-shadow: 0 12px 30px -18px rgba(0,0,0,0.5);
+  transition: opacity 0.16s ease, transform 0.16s ease;
+}
+
+.whatsapp-fab:hover,
+.whatsapp-fab:focus-visible {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 24px 54px -18px rgba(6,40,12,0.54);
+  filter: brightness(1.03);
+}
+
+.whatsapp-fab:hover::after,
+.whatsapp-fab:focus-visible::after {
+  opacity: 1;
+  transform: translateY(-50%) translateX(0);
+}
+
+.whatsapp-fab:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.whatsapp-fab img {
+  display: block;
+  width: 24px;
+  height: 24px;
+}
+
+@keyframes whatsappPulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.38), 0 18px 42px -18px rgba(6,40,12,0.48);
+  }
+  70% {
+    box-shadow: 0 0 0 12px rgba(37, 211, 102, 0), 0 18px 42px -18px rgba(6,40,12,0.48);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(37, 211, 102, 0), 0 18px 42px -18px rgba(6,40,12,0.48);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .whatsapp-fab {
+    animation: none;
+  }
+
+  .whatsapp-fab::after {
+    transition: none;
+  }
 }
 
 @media (max-width: 560px) {
-  .whatsapp-fab { left: 12px; bottom: 12px; width: 48px; height: 48px; }
+  .whatsapp-fab {
+    right: 12px;
+    bottom: 12px;
+    width: 52px;
+    height: 52px;
+  }
+
+  .whatsapp-fab::after {
+    content: "WhatsApp";
+    right: 60px;
+    padding: 7px 10px;
+    font-size: 0.68rem;
+  }
+
+  .whatsapp-fab img {
+    width: 22px;
+    height: 22px;
+  }
 }
 
 /* Stepper button */
