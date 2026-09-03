@@ -49,7 +49,6 @@ export default function Header({
 
         <nav className="header-nav" aria-label="Primary navigation">
           <ul className="nav-list">
-            <li><Link href="/" className="nav-link">Browse</Link></li>
             <li><Link href="/lookup" className="nav-link">Lookup</Link></li>
             <li><Link href="/terms" className="nav-link">Terms</Link></li>
           </ul>
