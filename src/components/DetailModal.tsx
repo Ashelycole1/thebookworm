@@ -15,6 +15,8 @@ interface DetailModalProps {
   onBuyNow?: (book: Book, qty?: number) => void;
   onClose: () => void;
   currency: CurrencyConfig;
+  recommendedBooks?: Book[];
+  onSelectRecommended?: (book: Book) => void;
 }
 
 export default function DetailModal({
@@ -25,6 +27,8 @@ export default function DetailModal({
   onBuyNow,
   onClose,
   currency,
+  recommendedBooks = [],
+  onSelectRecommended,
 }: DetailModalProps) {
   const [selectedFormat, setSelectedFormat] = useState<Format>(book.formats[0]);
   const [qty, setQty] = useState(1);
@@ -319,6 +323,34 @@ export default function DetailModal({
                 BUY NOW
               </button>
             </div>
+
+            {recommendedBooks.length > 0 && (
+              <div className="recommendations-section" style={{ marginTop: 24 }}>
+                <div className="meta-label" style={{ marginBottom: 12 }}>
+                  YOU MAY ALSO LIKE
+                </div>
+                <div className="recommendations-row">
+                  {recommendedBooks.map((item) => (
+                    <button
+                      key={String(item.id)}
+                      type="button"
+                      className="recommendation-card"
+                      onClick={() => onSelectRecommended?.(item)}
+                      aria-label={`View recommended book ${item.title}`}
+                    >
+                      <div className="recommendation-cover-wrap">
+                        <Cover book={item} size="mini" />
+                      </div>
+                      <div className="recommendation-text">
+                        <span className="recommendation-title">{item.title}</span>
+                        <span className="recommendation-author">{item.author}</span>
+                        <span className="recommendation-price">{formatPrice(item.price, currency)}</span>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>

@@ -257,6 +257,23 @@ export default function HomeClient({ initialBooks, initialBookId }: HomeClientPr
           onBuyNow={buyNow}
           onClose={closeDetail}
           currency={currency}
+          recommendedBooks={books
+            .filter((book) => book.id !== selected.id)
+            .sort((a, b) => {
+              const aMatch = (Array.isArray(a.genre) ? a.genre : [a.genre]).filter((g) =>
+                (Array.isArray(selected.genre) ? selected.genre : [selected.genre]).includes(g as Genre)
+              ).length;
+              const bMatch = (Array.isArray(b.genre) ? b.genre : [b.genre]).filter((g) =>
+                (Array.isArray(selected.genre) ? selected.genre : [selected.genre]).includes(g as Genre)
+              ).length;
+
+              if (aMatch !== bMatch) return bMatch - aMatch;
+              if (a.author === selected.author && b.author !== selected.author) return -1;
+              if (a.author !== selected.author && b.author === selected.author) return 1;
+              return a.title.localeCompare(b.title);
+            })
+            .slice(0, 6)}
+          onSelectRecommended={setSelected}
         />
       )}
 
