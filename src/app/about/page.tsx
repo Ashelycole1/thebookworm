@@ -17,7 +17,7 @@ const builders = [
     bio: "Passionate about crafting seamless product experiences that make finding textbooks effortless for students.",
     initials: "NA",
     linkedin: "https://www.linkedin.com/in/niwasiima-ashelycole-091698390",
-    avatar: "/assets/Niwasiima-Ashelycole.png",
+    avatar: "/Assets/Niwasiima-Ashelycole.png",
   },
   {
     name: "Egabo Aaron",
@@ -25,7 +25,7 @@ const builders = [
     bio: "Driven by building dependable platforms that make academic materials accessible to every learner.",
     initials: "EA",
     linkedin: "https://www.linkedin.com/in/egaboaaron/",
-    avatar: "/assets/Egabo-Aaron.png",
+    avatar: "/Assets/Egabo-Aaron.png",
   },
   {
     name: "Rwothomio Evans .E.",
@@ -33,7 +33,7 @@ const builders = [
     bio: "Focused on creating intuitive digital interfaces that simplify daily studying and book discovery.",
     initials: "RE",
     linkedin: "https://www.linkedin.com/in/rwothomio-evans-e-7948ab398",
-    avatar: "/assets/Rwothomio-Evans-E.png",
+    avatar: "/Assets/Rwothomio-Evans-E.png",
   },
   {
     name: "Onyango John Steven",
@@ -41,7 +41,7 @@ const builders = [
     bio: "Dedicated to streamlining resource access so students can get the exact books they need without delay.",
     initials: "OS",
     linkedin: "https://www.linkedin.com/in/john-steven-onyango-9794a1376",
-    avatar: "/assets/Onyango-John-Steven.png",
+    avatar: "/Assets/Onyango-John-Steven.png",
   },
   {
     name: "Natozo Patience Martha",
@@ -49,7 +49,7 @@ const builders = [
     bio: "Passionate about human-centered design that makes educational platforms welcoming and easy to navigate.",
     initials: "NM",
     linkedin: "https://www.linkedin.com/in/martha-natozo-bba5ab395",
-    avatar: "/assets/Natozo-Patience-Martha.png",
+    avatar: "/Assets/Natozo-Patience-Martha.png",
   },
   {
     name: "Alimpa Anne Hillary",
@@ -57,7 +57,7 @@ const builders = [
     bio: "Inspired by creating digital tools that give students confidence and clarity in their learning journeys.",
     initials: "AH",
     linkedin: "https://www.linkedin.com/in/alimpa-hillary-9ab7b53b8",
-    avatar: "/assets/Alimpa-Anne-Hillary.png",
+    avatar: "/Assets/Alimpa-Anne-Hillary.png",
   },
 ];
 
