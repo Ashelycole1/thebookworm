@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useState, useMemo, useCallback, useEffect } from "react";
 import { Book, CartLine, Genre } from "@/types";
@@ -223,9 +224,23 @@ export default function HomeClient({ initialBooks, initialBookId }: HomeClientPr
       <footer className="site-footer">
         <div className="container footer-inner">
           <div className="footer-top">
-            <span className="footer-brand-desc">
-              The Bookworm — The digital archive for developers, students, and curious minds.
-            </span>
+            <div className="footer-brand-wrap">
+              <div className="footer-brand-mark">
+                <Image
+                  src="/logo-icon.png"
+                  alt="The Bookworm"
+                  width={52}
+                  height={52}
+                  priority
+                />
+              </div>
+              <div className="footer-brand-copy">
+                <span className="footer-brand-title">The Bookworm</span>
+                <span className="footer-brand-desc">
+                  The digital archive for curious minds, life-long learners, tech enthusiasts, students and those who just need a companion to easily access a book.
+                </span>
+              </div>
+            </div>
             <span className="footer-value-prop">
               Pay once via Mobile Money &bull; Download instantly &bull; Keep forever.
             </span>
@@ -234,11 +249,11 @@ export default function HomeClient({ initialBooks, initialBookId }: HomeClientPr
             <span className="footer-copyright">
               &copy; 2026 The Bookworm
             </span>
-            <div className="footer-links" style={{ display: "flex", gap: "32px", justifyContent: "center", fontWeight: 500, fontSize: "1rem", marginTop: "16px" }}>
-              <Link href="/lookup" style={{ color: "var(--color-ink)", textDecoration: "none" }}>Find My Books</Link>
-              <a href="/terms" style={{ color: "var(--color-ink)", textDecoration: "none" }}>Terms of Use</a>
-              <a href="/privacy" style={{ color: "var(--color-ink)", textDecoration: "none" }}>Privacy Policy</a>
-              <a href="/disclaimer" style={{ color: "var(--color-ink)", textDecoration: "none" }}>Disclaimers</a>
+            <div className="footer-links">
+              <Link href="/lookup">Find My Books</Link>
+              <Link href="/terms">Terms of Use</Link>
+              <Link href="/privacy">Privacy Policy</Link>
+              <Link href="/disclaimer">Disclaimers</Link>
             </div>
             <span className="footer-credit">
               Made by <a href="https://www.linkedin.com/company/renoa-collective/" target="_blank" rel="noopener noreferrer">RENOA</a>
