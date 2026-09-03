@@ -56,9 +56,11 @@ export async function POST(req: NextRequest) {
     for (const book of books) {
       if (!book.fileStorageKey || !book.isAvailable) continue;
 
+      const sanitizedTitle = book.title.replace(/[^a-zA-Z0-9 \-_]/g, '').trim();
       const command = new GetObjectCommand({
         Bucket: process.env.R2_BUCKET_NAME,
         Key: book.fileStorageKey,
+        ResponseContentDisposition: `attachment; filename="${sanitizedTitle}.pdf"`,
       });
 
       try {
