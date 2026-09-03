@@ -27,6 +27,7 @@ export default function NylonPayModal({
   const [step, setStep] = useState<PayStep>("form");
   const [phone, setPhone] = useState("");
   const [phoneError, setPhoneError] = useState("");
+  const [orderRef, setOrderRef] = useState("");
   const [downloads, setDownloads] = useState<{title: string; url: string}[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
   const pollRef = useRef<NodeJS.Timeout | null>(null);
@@ -88,6 +89,7 @@ export default function NylonPayModal({
         setStep("form");
         return;
       }
+      setOrderRef(data.reference);
 
       // Poll for status every 3 seconds
       pollRef.current = setInterval(async () => {
@@ -315,8 +317,7 @@ export default function NylonPayModal({
                 fontWeight: 500,
               }}
             >
-              Check your phone for the payment request and enter your PIN to
-              confirm.
+              Check your phone for the payment request and enter your PIN to confirm. (This may take up to 30 seconds depending on your network provider).
             </p>
             <button
               onClick={handleCancelPayment}
@@ -360,6 +361,21 @@ export default function NylonPayModal({
             >
               Your books are ready. Click below to download them directly. These links will expire in 15 minutes.
             </p>
+            
+            {orderRef && (
+              <div style={{ marginTop: 12, padding: "8px 12px", background: "var(--color-card-alt)", borderRadius: 8, border: "1px solid var(--color-border)", fontSize: "0.85rem", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <div>
+                  <span style={{ color: "var(--color-ink-muted)", fontWeight: 600, display: "block", fontSize: "0.75rem", marginBottom: 2 }}>ORDER REFERENCE</span>
+                  <span style={{ fontFamily: "monospace", fontWeight: 700 }}>{orderRef}</span>
+                </div>
+                <button 
+                  onClick={() => navigator.clipboard.writeText(orderRef)}
+                  style={{ background: "none", border: "none", color: "var(--color-ink-muted)", cursor: "pointer", textDecoration: "underline", fontSize: "0.75rem" }}
+                >
+                  Copy
+                </button>
+              </div>
+            )}
 
             <div style={{ width: "100%", marginTop: 24, textAlign: "left" }}>
               {downloads.length > 0 ? (

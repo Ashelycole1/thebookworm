@@ -70,7 +70,7 @@ export default function OrderLookupPage() {
           Find My Books
         </h1>
         <p style={{ color: "var(--color-ink-muted)", marginBottom: 32, lineHeight: 1.6 }}>
-          Enter the phone number you used for payment and your Mobile Money Transaction ID to securely recover your download links.
+          Enter the phone number you used for payment and your Order Reference to securely recover your download links.
         </p>
 
         {!downloads ? (
@@ -89,16 +89,16 @@ export default function OrderLookupPage() {
             </div>
             <div style={{ marginBottom: 24 }}>
               <label style={{ display: "block", fontSize: "0.85rem", fontWeight: 700, marginBottom: 4, color: "var(--color-ink-muted)" }}>
-                TRANSACTION ID
+                ORDER REFERENCE
               </label>
               <p style={{ fontSize: "0.75rem", color: "var(--color-ink-muted)", marginBottom: 8 }}>
-                MTN: Starts with ID (e.g. 235123...). Airtel: Check "Txn Id" in SMS.
+                The reference number shown on your successful checkout screen.
               </p>
               <input
                 type="text"
                 value={transactionId}
                 onChange={(e) => setTransactionId(e.target.value)}
-                placeholder="e.g. NBP12345678"
+                placeholder="e.g. ref_123456"
                 style={{ width: "100%", padding: "12px 16px", borderRadius: 12, border: "1.5px solid var(--color-border)", background: "var(--color-bg)", fontSize: "1rem" }}
               />
             </div>
