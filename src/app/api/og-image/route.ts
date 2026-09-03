@@ -29,18 +29,29 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: "Book not found" }, { status: 404 });
     }
 
-    // coverImageUrl is stored as a relative path like /books/public/<key>
-    // Strip the leading /books/public/ rewrite prefix to get the raw R2 key
+    // coverImageUrl is stored as either:
+    // - /api/cover?key=books%2Fpublic%2F<key>
+    // - /books/public/<key>
+    // - a fully-qualified URL
     const coverUrl = book.coverImageUrl as string;
     let r2Key = coverUrl;
 
-    // Handle: /books/public/<key> → <key>
-    if (r2Key.startsWith("/books/public/")) {
+    if (coverUrl.startsWith("/api/cover?key=")) {
+      const keyParam = new URL(coverUrl, "https://example.com").searchParams.get("key");
+      if (keyParam) {
+        r2Key = decodeURIComponent(keyParam);
+      }
+    } else if (r2Key.startsWith("/books/public/")) {
       r2Key = r2Key.slice("/books/public/".length);
     }
+
     // Handle: already a full URL (e.g. https://...) — redirect directly
     if (r2Key.startsWith("http://") || r2Key.startsWith("https://")) {
       return NextResponse.redirect(r2Key);
+    }
+
+    if (!r2Key || r2Key === "/api/cover") {
+      return NextResponse.json({ error: "No valid cover image key" }, { status: 404 });
     }
 
     const command = new GetObjectCommand({
