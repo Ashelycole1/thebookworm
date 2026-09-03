@@ -35,6 +35,7 @@ export async function POST(request: Request) {
         phoneNumber,
       },
       description: "Book Purchase",
+      method: "mobileMoney",
     });
 
     await connectDB();
