@@ -2,7 +2,8 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Search, ShoppingBag, X } from "lucide-react";
+import { Menu, Search, ShoppingBag, X } from "lucide-react";
+import { useState } from "react";
 import { normalizeWhatsAppLink } from "@/lib/whatsapp";
 
 interface HeaderProps {
@@ -22,6 +23,8 @@ export default function Header({
   query,
   onQueryChange,
 }: HeaderProps) {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
   const whatsappLink = normalizeWhatsAppLink(
     process.env.NEXT_PUBLIC_WHATSAPP_LINK ??
       process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ??
@@ -50,6 +53,7 @@ export default function Header({
         <nav className="header-nav" aria-label="Primary navigation">
           <ul className="nav-list">
             <li><Link href="/lookup" className="nav-link">Lookup</Link></li>
+            <li><Link href="/about" className="nav-link">About Us</Link></li>
             <li><Link href="/terms" className="nav-link">Terms</Link></li>
           </ul>
         </nav>
@@ -96,6 +100,31 @@ export default function Header({
             <span className="header-cart-label">{cartCount > 0 ? `${cartCount} item${cartCount > 1 ? 's' : ''}` : 'Cart'}</span>
             {cartCount > 0 && <span className="cart-badge" aria-hidden="true">{cartCount}</span>}
           </button>
+
+          <div className="mobile-menu-wrap">
+            <button
+              className="mobile-menu-button"
+              onClick={() => setMobileMenuOpen((open) => !open)}
+              aria-label={mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+              aria-expanded={mobileMenuOpen}
+            >
+              {mobileMenuOpen ? <X size={18} strokeWidth={2} /> : <Menu size={18} strokeWidth={2} />}
+            </button>
+
+            {mobileMenuOpen && (
+              <div className="mobile-menu-panel" role="menu" aria-label="Mobile navigation">
+                <Link href="/lookup" className="mobile-menu-link" onClick={() => setMobileMenuOpen(false)}>
+                  Lookup
+                </Link>
+                <Link href="/about" className="mobile-menu-link" onClick={() => setMobileMenuOpen(false)}>
+                  About Us
+                </Link>
+                <Link href="/terms" className="mobile-menu-link" onClick={() => setMobileMenuOpen(false)}>
+                  Terms
+                </Link>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </header>

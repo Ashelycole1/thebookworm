@@ -1,9 +1,10 @@
-import React from "react";
+import React, { Suspense } from "react";
 import type { Metadata } from "next";
 import type { Viewport } from "next";
 import { Manrope } from "next/font/google";
 import "./globals.css";
 import PwaRegister from "@/components/PwaRegister";
+import ScrollToTop from "@/components/ScrollToTop";
 import WhatsAppFab from "@/components/WhatsAppFab";
 
 const manrope = Manrope({
@@ -85,6 +86,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={manrope.className}>
         <PwaRegister />
+        <Suspense fallback={null}>
+          <ScrollToTop />
+        </Suspense>
         <WhatsAppFab />
         {children}
       </body>
