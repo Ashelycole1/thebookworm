@@ -28,6 +28,7 @@ export default function NylonPayModal({
   const [phone, setPhone] = useState("");
   const [phoneError, setPhoneError] = useState("");
   const [orderRef, setOrderRef] = useState("");
+  const [copied, setCopied] = useState(false);
   const [downloads, setDownloads] = useState<{title: string; url: string}[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
   const pollRef = useRef<NodeJS.Timeout | null>(null);
@@ -369,10 +370,14 @@ export default function NylonPayModal({
                   <span style={{ fontFamily: "monospace", fontWeight: 700 }}>{orderRef}</span>
                 </div>
                 <button 
-                  onClick={() => navigator.clipboard.writeText(orderRef)}
-                  style={{ background: "none", border: "none", color: "var(--color-ink-muted)", cursor: "pointer", textDecoration: "underline", fontSize: "0.75rem" }}
+                  onClick={() => {
+                    navigator.clipboard.writeText(orderRef);
+                    setCopied(true);
+                    setTimeout(() => setCopied(false), 2000);
+                  }}
+                  style={{ background: "none", border: "none", color: copied ? "var(--color-green)" : "var(--color-ink-muted)", cursor: "pointer", textDecoration: copied ? "none" : "underline", fontSize: "0.75rem", fontWeight: copied ? 700 : 500 }}
                 >
-                  Copy
+                  {copied ? "Copied!" : "Copy"}
                 </button>
               </div>
             )}
