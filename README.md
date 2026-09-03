@@ -1,46 +1,55 @@
 <p align="center">
-	<img src="./public/bookworm-logo.png" alt="The Bookworm logo" width="160" />
+  <img src="./public/logo-icon.png" alt="The Bookworm logo" width="120" />
 </p>
 
 # The Bookworm
 
-[![Next.js](https://img.shields.io/badge/Next.js-13-black?style=for-the-badge&logo=nextdotjs)](https://nextjs.org)
-[![React](https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge&logo=react&logoColor=white)](https://reactjs.org)
-[![TypeScript](https://img.shields.io/badge/TypeScript-4.9-blue?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org)
-[![Node.js](https://img.shields.io/badge/Node.js-18-green?style=for-the-badge&logo=node.js)](https://nodejs.org)
+A modern digital bookstore for discovering, buying, and downloading books with ease.
+
+[![Next.js](https://img.shields.io/badge/Next.js-16-000000?style=for-the-badge&logo=nextdotjs)](https://nextjs.org)
+[![React](https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=white)](https://react.dev)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org)
 [![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-47A248?style=for-the-badge&logo=mongodb&logoColor=white)](https://www.mongodb.com/atlas)
-[![Cloudflare R2](https://img.shields.io/badge/Cloudflare--R2-storage-orange?style=for-the-badge)](https://developers.cloudflare.com/r2/)
-[![Playwright](https://img.shields.io/badge/Playwright-testing-000?style=for-the-badge&logo=playwright)](https://playwright.dev)
+[![Cloudflare R2](https://img.shields.io/badge/Cloudflare_R2-Storage-F38020?style=for-the-badge)](https://developers.cloudflare.com/r2/)
 
-One-stop shop for hand-picked digital books — buy once, download instantly, keep forever.
-
----
-
-## What's included / What it does
-
-- Server-rendered Next.js app (App Router)
-- Book catalogue (MongoDB via Mongoose) with deterministic ratings and detail views
-- Shareable book links that render proper Open Graph/Twitter metadata and a proxied cover image (`/api/og-image?id=<bookId>`)
-- Integrated payment flow using Nylon Pay (`/api/checkout/initiate`) and secure time-limited downloads via presigned R2 URLs (`/api/download`)
-- PWA-ready (service worker + manifest) — installable on mobile & desktop
-- Responsive design with mobile-first refinements and accessible components
+The Bookworm is a storefront and digital library where users can browse curated titles, explore book details, make purchases, and instantly access downloadable content.
 
 ---
 
-## Tech stack (interactive)
+## What the app does
 
-Click a badge to learn more about each component used here.
-
-- Frontend: [Next.js](https://nextjs.org), React, TypeScript
-- Backend / API: Next.js API routes, Node.js
-- Database: MongoDB (Mongoose)
-- Object storage: Cloudflare R2 (proxied via `src/app/api/og-image/route.ts` and used for book asset storage)
-- Payments: Nylon Pay (`@nile-squad/nylonpay-ts`) — see `src/app/api/checkout/initiate/route.ts`
-- Testing: Playwright (visual & layout checks used during development)
+- Shows a premium bookstore homepage with a hero section, book grid/list views, and filters
+- Lets users search and browse books by title, author, and category
+- Opens a detailed book modal with a description, pricing, and recommendations
+- Supports adding books to cart and checking out through the payment flow
+- Provides downloadable content after purchase using secure signed URLs
+- Works as a PWA and is optimized for mobile, tablet, and desktop experiences
 
 ---
 
-## Quick start (local development)
+## Key features
+
+- Responsive storefront UI built with Next.js App Router
+- MongoDB-backed catalog and order management
+- Book detail pages and shareable metadata previews
+- WhatsApp and checkout integrations
+- Cloudflare R2 asset handling for stored book media and covers
+- Fast browsing with pagination and recommendation logic
+
+---
+
+## Tech stack
+
+- Frontend: Next.js, React, TypeScript
+- Backend: Next.js API routes, Node.js
+- Database: MongoDB with Mongoose
+- Storage: Cloudflare R2
+- Payments: Nylon Pay
+- PWA: Service worker + web manifest
+
+---
+
+## Local setup
 
 1. Install dependencies
 
@@ -48,87 +57,81 @@ Click a badge to learn more about each component used here.
 npm install
 ```
 
-2. Copy environment variables (see `.env.example` or the list below) and start the dev server
+2. Start the app in development mode
 
 ```bash
-cp .env.example .env.local
 npm run dev
 ```
 
-Open http://localhost:3000
+3. Open the app in your browser
 
-Important environment variables used in this project:
-
-- `NEXT_PUBLIC_SITE_URL` — public site URL used when generating absolute links and metadata
-- `R2_BUCKET_NAME` — Cloudflare R2 bucket name
-- `NYLON_PAY_API_KEY`, `NYLON_PAY_API_SECRET` — Nylon Pay credentials for initiating collections
-- Any MongoDB connection URI used by `src/lib/db.ts`
+```text
+http://localhost:3000
+```
 
 ---
 
-## Sharing books / social previews
+## Required environment variables
 
-Share a book with the URL format:
+Create a local environment file such as `.env.local` with the variables below:
 
+```env
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
+MONGODB_URI=your_mongodb_connection_string
+R2_ACCOUNT_ID=your_r2_account_id
+R2_ACCESS_KEY_ID=your_r2_access_key
+R2_SECRET_ACCESS_KEY=your_r2_secret_key
+R2_BUCKET_NAME=your_r2_bucket_name
+NYLON_PAY_API_KEY=your_nylon_pay_key
+NYLON_PAY_API_SECRET=your_nylon_pay_secret
+NEXT_PUBLIC_WHATSAPP_LINK=https://wa.me/your_number
+# or
+NEXT_PUBLIC_WHATSAPP_NUMBER=your_number
 ```
-https://<your-site>/?book=<BOOK_ID>
-```
-
-This route populates Open Graph metadata in `generateMetadata` and points social crawlers at `/api/og-image?id=<bookId>` so previews include the book cover.
 
 ---
 
-## How to use (mermaid)
+## How it works
 
 ```mermaid
 flowchart LR
-	U[User] -->|Browse| S[Website]
-	S -->|Open book modal| B[Book Detail]
-	B -->|Share| Social[Social Preview]
-	B -->|Buy Now| P[Payment Gateway]
-	P -->|Create Order| O[(Orders DB)]
-	O -->|Confirm| D[Download Service]
-	D -->|Presigned URL| U
+    U[User] --> B[Browse books]
+    B --> D[Open book detail]
+    D --> C[Add to cart / buy]
+    C --> P[Payment gateway]
+    P --> O[Order created]
+    O --> S[Secure download URL]
+    S --> U
 ```
 
 ---
 
-## Install as a PWA
+## Project structure
 
-- Chrome / Edge / Brave: open the site, click the browser menu (⋮) → "Install app" or the install icon in the address bar.
-- Safari (iOS): open the site, tap Share → "Add to Home Screen".
-- After installation the app launches in a standalone window with an app icon.
-
-The site includes `manifest.webmanifest` and a service worker (`public/sw.js`) to enable offline and install behavior.
-
----
-
-## Usage notes
-
-- When a purchase is completed, the backend creates an `Order` and the client can request a presigned download URL from `/api/download` (the endpoint verifies the order status before signing).
-- The `/api/og-image` route streams the image bytes from R2 so crawlers receive the cover image without redirects.
+```text
+src/
+  app/              # App Router pages and API routes
+  components/       # UI components
+  lib/              # Database, R2, and shared helpers
+  models/           # Mongoose models
+  types/            # Shared TypeScript types
+public/             # Static assets and PWA files
+```
 
 ---
 
-## Credits
+## Notes
 
-Built by the RENOA team.
-
-- Design & Engineering: RENOA Collective
-- Repo & code: The Bookworm project
-
-If you'd like, I can also:
-
-- add a small `.env.example` listing the expected env vars,
-- add a `/books/[id]` permalink route that produces the same metadata, or
-- generate a one-click share image preview screenshot for the README.
+- This project is designed to deliver a clean digital-book marketplace experience.
+- Purchase flows and download access are protected by server-side validation.
+- The app is optimized for mobile-first browsing and installable app-like usage.
 
 ---
 
 ## License
 
-This repository does not include an explicit license file. Add one if you intend to open-source the project.
+This project is licensed under the [MIT License](LICENSE).
 
 ---
 
-Happy reading!
+Built for readers who want a simple, fast, and thoughtful way to access books.
