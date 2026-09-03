@@ -162,10 +162,6 @@ export default function AboutPage() {
           </div>
         </section>
 
-        <Link href="/" className="about-footer-link">
-          <ArrowLeft size={16} />
-          Back to catalog
-        </Link>
       </main>
     </div>
   );
