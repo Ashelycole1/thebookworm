@@ -4,6 +4,8 @@ import connectDB from "@/lib/db";
 import BookModel from "@/models/Book";
 import type { Book, Genre } from "@/types";
 
+export const dynamic = "force-dynamic";
+
 type Props = {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
