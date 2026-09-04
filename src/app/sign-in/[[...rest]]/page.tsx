@@ -37,7 +37,7 @@ export default function SignInPage() {
             <p style={{ color: '#6b7280', textAlign: 'center', marginBottom: 18 }}>Welcome back! Please sign in to continue</p>
 
             <div style={{ display: 'flex', justifyContent: 'center' }}>
-              <SignInButton mode="redirect" redirectUrl="/admin">
+              <SignInButton {...({ mode: "redirect", redirectUrl: "/admin" } as any)}>
                 <AdminSignInButton />
               </SignInButton>
             </div>

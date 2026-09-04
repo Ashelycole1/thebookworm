@@ -9,7 +9,7 @@ import Book from "@/models/Book";
  * Fetch all books (including hidden ones) for the admin panel.
  */
 export async function GET() {
-  const { userId } = auth();
+  const { userId } = await auth();
   if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   try {
     await connectDB();
@@ -38,7 +38,7 @@ export async function GET() {
  *   { title, author, description, priceUGX, genre[], fileStorageKey, coverStorageKey }
  */
 export async function POST(req: NextRequest): Promise<NextResponse> {
-  const { userId } = auth();
+  const { userId } = await auth();
   if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   try {
     const body = await req.json();

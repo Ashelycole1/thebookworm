@@ -20,7 +20,7 @@ export const dynamic = "force-dynamic";
  *   { pdfUploadUrl, pdfKey, coverUploadUrl, coverKey }
  */
 export async function POST(req: NextRequest): Promise<NextResponse> {
-  const { userId } = auth();
+  const { userId } = await auth();
   if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   try {
     const { pdfFilename, pdfContentType, coverFilename, coverContentType } =
