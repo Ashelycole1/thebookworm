@@ -90,7 +90,10 @@ export default function AdminClient() {
   const fetchOrders = useCallback(async () => {
     setLoadingOrders(true);
     try {
-      const res = await fetch("/api/admin/orders");
+      const res = await fetch("/api/admin/orders", {
+        cache: "no-store",
+        headers: { "Cache-Control": "no-cache, no-store, must-revalidate", "Pragma": "no-cache" }
+      });
       const data = await res.json();
       setOrders(Array.isArray(data) ? data : []);
     } catch {
@@ -108,7 +111,10 @@ export default function AdminClient() {
   const fetchBooks = useCallback(async () => {
     setLoadingBooks(true);
     try {
-      const res = await fetch("/api/admin/books");
+      const res = await fetch("/api/admin/books", {
+        cache: "no-store",
+        headers: { "Cache-Control": "no-cache, no-store, must-revalidate", "Pragma": "no-cache" }
+      });
       const data = await res.json();
       setBooks(data);
     } catch {
