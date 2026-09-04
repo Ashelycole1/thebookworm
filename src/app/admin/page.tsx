@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { useRouter } from "next/navigation";
 import styles from "./admin.module.css";
 import { Upload, Book, FileText, ImageIcon, DollarSign, Tag, Pencil, Trash2, ToggleLeft, ToggleRight, Check, X, Link, Star } from "lucide-react";
 
@@ -46,6 +47,21 @@ interface EditState {
 
 export default function AdminPage() {
   const [tab, setTab] = useState<"upload" | "manage">("upload");
+  const router = useRouter();
+
+  useEffect(() => {
+    try {
+      const ok = sessionStorage.getItem("allowAdmin");
+      if (!ok) {
+        router.replace("/");
+        return;
+      }
+      // clear the flag so back/refresh requires clicking again
+      sessionStorage.removeItem("allowAdmin");
+    } catch (e) {
+      router.replace("/");
+    }
+  }, [router]);
 
   // --- Upload state ---
   const [uploading, setUploading] = useState(false);
