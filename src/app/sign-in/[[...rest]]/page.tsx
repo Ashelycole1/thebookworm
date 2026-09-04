@@ -1,10 +1,11 @@
 "use client";
 
-import React from "react";
-import { SignInButton } from "@clerk/nextjs";
+import React, { useEffect } from "react";
+import { SignInButton, useAuth } from "@clerk/nextjs";
 import ClerkProviderWrapper from "@/components/ClerkProviderWrapper";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 function AdminSignInButton(props: any) {
   const { onClick, className, children, redirectUrl, routing, mode, ...rest } = props || {};
@@ -27,9 +28,18 @@ function AdminSignInButton(props: any) {
   );
 }
 
-export default function SignInPage() {
+function SignInContent() {
+  const { isLoaded, isSignedIn } = useAuth();
+  const router = useRouter();
+
+  // If the user is already signed in, immediately redirect them to the admin portal
+  useEffect(() => {
+    if (isLoaded && isSignedIn) {
+      router.push("/keep-forever");
+    }
+  }, [isLoaded, isSignedIn, router]);
+
   return (
-    <ClerkProviderWrapper>
       <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh", background: "var(--color-bg)", padding: 20 }}>
         <div style={{ width: '100%', maxWidth: 420 }}>
           <div style={{ marginBottom: 24 }}>
@@ -48,7 +58,7 @@ export default function SignInPage() {
             </div>
 
             <div style={{ marginTop: 32 }}>
-              <SignInButton {...({ mode: "redirect", redirectUrl: "/keep-forever" } as any)}>
+              <SignInButton mode="modal" fallbackRedirectUrl="/keep-forever" forceRedirectUrl="/keep-forever">
                 <AdminSignInButton />
               </SignInButton>
             </div>
@@ -59,6 +69,13 @@ export default function SignInPage() {
           </div>
         </div>
       </div>
+  );
+}
+
+export default function SignInPage() {
+  return (
+    <ClerkProviderWrapper>
+      <SignInContent />
     </ClerkProviderWrapper>
   );
 }

@@ -15,6 +15,15 @@ const nextConfig: NextConfig = {
         destination: '/api/cover?key=:path*',
       },
     ]
+  },
+  async redirects() {
+    return [
+      {
+        source: '/admin',
+        destination: '/',
+        permanent: false,
+      },
+    ]
   }
 };
 
