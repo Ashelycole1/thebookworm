@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { auth } from "@clerk/nextjs/server";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import connectDB from "@/lib/db";
 import Book from "@/models/Book";
@@ -12,6 +13,8 @@ export async function PATCH(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const { userId } = auth();
+  if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   try {
     const { id } = await params;
     await connectDB();
@@ -87,6 +90,8 @@ export async function DELETE(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const { userId } = auth();
+  if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   try {
     const { id } = await params;
     await connectDB();

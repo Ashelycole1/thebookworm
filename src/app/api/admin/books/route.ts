@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { auth } from "@clerk/nextjs/server";
 export const dynamic = "force-dynamic";
 import connectDB from "@/lib/db";
 import Book from "@/models/Book";
@@ -8,6 +9,8 @@ import Book from "@/models/Book";
  * Fetch all books (including hidden ones) for the admin panel.
  */
 export async function GET() {
+  const { userId } = auth();
+  if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   try {
     await connectDB();
     const books = await Book.find({}).sort({ createdAt: -1 }).lean();
@@ -35,6 +38,8 @@ export async function GET() {
  *   { title, author, description, priceUGX, genre[], fileStorageKey, coverStorageKey }
  */
 export async function POST(req: NextRequest): Promise<NextResponse> {
+  const { userId } = auth();
+  if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   try {
     const body = await req.json();
     const { title, author, description, priceUGX, genre, fileStorageKey, coverStorageKey } = body;

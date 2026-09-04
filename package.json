@@ -11,6 +11,7 @@
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1123.0",
     "@aws-sdk/s3-request-presigner": "^3.1123.0",
+    "@clerk/nextjs": "^7.9.1",
     "@nile-squad/nylonpay-ts": "^2.0.0",
     "lucide-react": "^1.38.0",
     "mongoose": "^9.9.4",

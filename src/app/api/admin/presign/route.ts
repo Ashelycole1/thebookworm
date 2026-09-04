@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { auth } from "@clerk/nextjs/server";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { r2 } from "@/lib/r2";
@@ -19,6 +20,8 @@ export const dynamic = "force-dynamic";
  *   { pdfUploadUrl, pdfKey, coverUploadUrl, coverKey }
  */
 export async function POST(req: NextRequest): Promise<NextResponse> {
+  const { userId } = auth();
+  if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   try {
     const { pdfFilename, pdfContentType, coverFilename, coverContentType } =
       await req.json();

@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { auth } from "@clerk/nextjs/server";
 import connectDB from "@/lib/db";
 import Book from "@/models/Book";
 
@@ -8,6 +9,8 @@ import Book from "@/models/Book";
  * Use this when books have been accidentally hidden.
  */
 export async function POST() {
+  const { userId } = auth();
+  if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   try {
     await connectDB();
     const result = await Book.updateMany({}, { isAvailable: true });
