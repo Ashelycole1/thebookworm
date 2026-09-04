@@ -4,7 +4,7 @@ import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import connectDB from "@/lib/db";
 import Order from "@/models/Order";
 import Book from "@/models/Book";
-import { r2 } from "@/lib/r2";
+import { getR2 } from "@/lib/r2";
 
 const PRESIGNED_URL_TTL_SECONDS = 900; // 15 mins
 
@@ -64,7 +64,9 @@ export async function POST(req: NextRequest) {
       });
 
       try {
-        const url = await getSignedUrl(r2, command, { expiresIn: PRESIGNED_URL_TTL_SECONDS });
+        const client = getR2();
+        if (!client) throw new Error("R2 not configured");
+        const url = await getSignedUrl(client, command, { expiresIn: PRESIGNED_URL_TTL_SECONDS });
         downloads.push({
           title: book.title,
           author: book.author,

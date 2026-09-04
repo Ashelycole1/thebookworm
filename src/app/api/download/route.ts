@@ -4,7 +4,7 @@ import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import connectDB from "@/lib/db";
 import Book from "@/models/Book";
 import Order from "@/models/Order";
-import { r2 } from "@/lib/r2";
+import { getR2 } from "@/lib/r2";
 
 /** Duration in seconds the presigned URL stays valid (15 minutes) */
 const PRESIGNED_URL_TTL_SECONDS = 900;
@@ -92,8 +92,12 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       Key: book.fileStorageKey,
       ResponseContentDisposition: `attachment; filename="${sanitizedTitle}.pdf"`,
     });
+    const client = getR2();
+    if (!client) {
+      return NextResponse.json({ error: "R2 credentials are not configured on the server." }, { status: 500 });
+    }
 
-    const downloadUrl = await getSignedUrl(r2, command, {
+    const downloadUrl = await getSignedUrl(client, command, {
       expiresIn: PRESIGNED_URL_TTL_SECONDS,
     });
 

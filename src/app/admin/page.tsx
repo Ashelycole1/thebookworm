@@ -144,55 +144,96 @@ export default function AdminPage() {
     try {
       // Step 1: Get presigned PUT URLs from our API (tiny JSON request, no file data)
       setUploadMsg({ type: "error", text: "" }); // clear
-      const presignRes = await fetch("/api/admin/presign", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          pdfFilename: pdfFile.name,
-          pdfContentType: pdfFile.type || "application/pdf",
-          coverFilename: coverImageFile.name,
-          coverContentType: coverImageFile.type || "image/jpeg",
-        }),
-      });
+      let pdfUploadUrl: string | null = null;
+      let coverUploadUrl: string | null = null;
+      let pdfKey: string | null = null;
+      let coverKey: string | null = null;
+      let presignFailed = false;
+      try {
+        const presignRes = await fetch("/api/admin/presign", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            pdfFilename: pdfFile.name,
+            pdfContentType: pdfFile.type || "application/pdf",
+            coverFilename: coverImageFile.name,
+            coverContentType: coverImageFile.type || "image/jpeg",
+          }),
+        });
 
-      if (!presignRes.ok) {
-        const err = await presignRes.json().catch(() => ({}));
-        throw new Error(err.error || `Presign failed (${presignRes.status})`);
+        if (!presignRes.ok) {
+          presignFailed = true;
+        } else {
+          const presignJson = await presignRes.json();
+          pdfUploadUrl = presignJson.pdfUploadUrl;
+          coverUploadUrl = presignJson.coverUploadUrl;
+          pdfKey = presignJson.pdfKey;
+          coverKey = presignJson.coverKey;
+        }
+      } catch (e) {
+        presignFailed = true;
       }
 
-      const { pdfUploadUrl, pdfKey, coverUploadUrl, coverKey } = await presignRes.json();
+      // Step 2: Try direct upload to R2 via presigned URLs
+      let metaRes;
+      // If presign failed, skip attempting direct PUT and go straight to proxy
+      if (presignFailed || !pdfUploadUrl || !coverUploadUrl || !pdfKey || !coverKey) {
+        const formData = new FormData();
+        formData.append("title", title);
+        formData.append("author", author);
+        formData.append("description", description);
+        formData.append("priceUGX", priceUGX);
+        for (const g of uploadGenres) formData.append("genre", g);
+        formData.append("coverImage", coverImageFile);
+        formData.append("file", pdfFile);
 
-      // Step 2: Upload PDF and cover image DIRECTLY to R2 (bypasses Vercel limits)
-      const [pdfUpload, coverUpload] = await Promise.all([
-        fetch(pdfUploadUrl, {
-          method: "PUT",
-          headers: { "Content-Type": pdfFile.type || "application/pdf" },
-          body: pdfFile,
-        }),
-        fetch(coverUploadUrl, {
-          method: "PUT",
-          headers: { "Content-Type": coverImageFile.type || "image/jpeg" },
-          body: coverImageFile,
-        }),
-      ]);
+        metaRes = await fetch("/api/admin/upload-proxy", { method: "POST", body: formData });
+      } else {
+        try {
+          const [pdfUpload, coverUpload] = await Promise.all([
+            fetch(pdfUploadUrl, {
+              method: "PUT",
+              headers: { "Content-Type": pdfFile.type || "application/pdf" },
+              body: pdfFile,
+            }),
+            fetch(coverUploadUrl, {
+              method: "PUT",
+              headers: { "Content-Type": coverImageFile.type || "image/jpeg" },
+              body: coverImageFile,
+            }),
+          ]);
 
-      if (!pdfUpload.ok) throw new Error(`PDF upload to storage failed (${pdfUpload.status})`);
-      if (!coverUpload.ok) throw new Error(`Cover upload to storage failed (${coverUpload.status})`);
+          if (!pdfUpload.ok) throw new Error(`PDF upload to storage failed (${pdfUpload.status})`);
+          if (!coverUpload.ok) throw new Error(`Cover upload to storage failed (${coverUpload.status})`);
 
-      // Step 3: Save metadata to MongoDB (tiny JSON, no files)
-      const metaRes = await fetch("/api/admin/books", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          title,
-          author,
-          description,
-          priceUGX: Number(priceUGX),
-          genre: uploadGenres,
-          fileStorageKey: pdfKey,
-          coverStorageKey: coverKey,
-        }),
-      });
+          // Step 3: Save metadata to MongoDB (tiny JSON, no files)
+          metaRes = await fetch("/api/admin/books", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              title,
+              author,
+              description,
+              priceUGX: Number(priceUGX),
+              genre: uploadGenres,
+              fileStorageKey: pdfKey,
+              coverStorageKey: coverKey,
+            }),
+          });
+        } catch (err) {
+          // If direct upload fails (CORS or network), fallback to server-side proxy upload
+          const formData = new FormData();
+          formData.append("title", title);
+          formData.append("author", author);
+          formData.append("description", description);
+          formData.append("priceUGX", priceUGX);
+          for (const g of uploadGenres) formData.append("genre", g);
+          formData.append("coverImage", coverImageFile);
+          formData.append("file", pdfFile);
+
+          metaRes = await fetch("/api/admin/upload-proxy", { method: "POST", body: formData });
+        }
+      }
 
       const metaData = await metaRes.json();
       if (!metaRes.ok) throw new Error(metaData.error || `Save failed (${metaRes.status})`);
@@ -203,7 +244,14 @@ export default function AdminPage() {
       setSelectedFile(null);
       setUploadGenres(["Fiction"]);
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : "Upload failed — please try again.";
+      let msg = "Upload failed — please try again.";
+      if (err instanceof Error) {
+        if (err.message && err.message.includes("Failed to fetch")) {
+          msg = "Upload failed: network error (Failed to fetch). Possible causes: server not reachable, CORS on R2 signed URL blocking the PUT, or the server-side proxy rejected a large upload. If your PDF is large (>4MB) configure R2 credentials on the server so direct uploads work, or upload a smaller file.";
+        } else {
+          msg = err.message;
+        }
+      }
       setUploadMsg({ type: "error", text: msg });
       console.error("[Admin upload error]", err);
     } finally {

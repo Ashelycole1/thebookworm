@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
-import { r2 } from "@/lib/r2";
+import { getR2 } from "@/lib/r2";
 
 export const dynamic = "force-dynamic";
 
@@ -36,9 +36,14 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     const pdfKey = `books/private/${ts}-${sanitize(pdfFilename)}`;
     const coverKey = `books/public/${ts}-${sanitize(coverFilename)}`;
 
+    const client = getR2();
+    if (!client) {
+      return NextResponse.json({ error: "R2 credentials are not configured on the server." }, { status: 500 });
+    }
+
     const [pdfUploadUrl, coverUploadUrl] = await Promise.all([
       getSignedUrl(
-        r2,
+        client,
         new PutObjectCommand({
           Bucket: process.env.R2_BUCKET_NAME,
           Key: pdfKey,
@@ -47,7 +52,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
         { expiresIn: 600 } // 10 minutes
       ),
       getSignedUrl(
-        r2,
+        client,
         new PutObjectCommand({
           Bucket: process.env.R2_BUCKET_NAME,
           Key: coverKey,
