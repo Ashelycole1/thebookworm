@@ -5,7 +5,7 @@ import BookModel from "@/models/Book";
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://the-book-worm.app";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  let books: Array<{ _id: string; updatedAt?: Date }> = [];
+  let books: any[] = [];
   
   try {
     await connectDB();
