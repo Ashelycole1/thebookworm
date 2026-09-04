@@ -325,6 +325,9 @@ export default function AdminClient() {
         <button className={`${styles.tab} ${tab === "manage" ? styles.tabActive : ""}`} onClick={() => setTab("manage")}>
           <Book size={16} /> Manage Books
         </button>
+        <button className={`${styles.tab} ${tab === "orders" ? styles.tabActive : ""}`} onClick={() => setTab("orders")}>
+          <ShoppingCart size={16} /> Orders
+        </button>
         <div style={{ marginLeft: 'auto', display: 'flex', gap: 8 }}>
           <button className={styles.refreshBtn} onClick={async () => { await signOut(); router.replace('/'); }} title="Sign out">Sign out</button>
         </div>
@@ -692,6 +695,97 @@ export default function AdminClient() {
                   </div>
                 </div>
               ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* ORDERS TAB */}
+      {tab === "orders" && (
+        <div className={styles.manageSection}>
+          <div className={styles.manageTitleRow}>
+            <h2 className={styles.formTitle} style={{ margin: 0 }}>Orders ({orders.length})</h2>
+            <button className={styles.refreshBtn} onClick={fetchOrders}>Refresh</button>
+          </div>
+
+          {/* Summary stats */}
+          {!loadingOrders && orders.length > 0 && (() => {
+            const successful = orders.filter(o => o.status === "SUCCESSFUL");
+            const totalRevenue = successful.reduce((sum, o) => sum + o.totalAmount, 0);
+            return (
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: 12, margin: '18px 0' }}>
+                <div style={{ background: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: 10, padding: '14px 18px' }}>
+                  <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#166534', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Successful</div>
+                  <div style={{ fontSize: 28, fontWeight: 800, color: '#15803d', marginTop: 4 }}>{successful.length}</div>
+                </div>
+                <div style={{ background: '#fefce8', border: '1px solid #fde68a', borderRadius: 10, padding: '14px 18px' }}>
+                  <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#92400e', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Pending</div>
+                  <div style={{ fontSize: 28, fontWeight: 800, color: '#d97706', marginTop: 4 }}>{orders.filter(o => o.status === 'PENDING').length}</div>
+                </div>
+                <div style={{ background: '#fef2f2', border: '1px solid #fecaca', borderRadius: 10, padding: '14px 18px' }}>
+                  <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#991b1b', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Failed</div>
+                  <div style={{ fontSize: 28, fontWeight: 800, color: '#dc2626', marginTop: 4 }}>{orders.filter(o => o.status === 'FAILED').length}</div>
+                </div>
+                <div style={{ background: '#eff6ff', border: '1px solid #bfdbfe', borderRadius: 10, padding: '14px 18px' }}>
+                  <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#1e40af', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Total Revenue</div>
+                  <div style={{ fontSize: 22, fontWeight: 800, color: '#1d4ed8', marginTop: 4 }}>UGX {totalRevenue.toLocaleString()}</div>
+                </div>
+              </div>
+            );
+          })()}
+
+          {loadingOrders ? (
+            <div className={styles.loadingMsg}>Loading orders...</div>
+          ) : orders.length === 0 ? (
+            <div className={styles.loadingMsg}>No orders yet.</div>
+          ) : (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginTop: 8 }}>
+              {orders.map((order) => {
+                const statusColor = order.status === 'SUCCESSFUL' ? { bg: '#f0fdf4', border: '#bbf7d0', text: '#15803d' }
+                  : order.status === 'FAILED' ? { bg: '#fef2f2', border: '#fecaca', text: '#dc2626' }
+                  : { bg: '#fefce8', border: '#fde68a', text: '#d97706' };
+                return (
+                  <div key={order._id} style={{ background: '#fff', border: '1px solid #f3f4f6', borderRadius: 12, padding: '16px 20px', boxShadow: '0 1px 4px rgba(0,0,0,0.04)' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 8, marginBottom: 12 }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                        <span style={{ fontWeight: 700, fontSize: '0.95rem', color: 'var(--color-ink)' }}>
+                          {order.phoneNumber}
+                        </span>
+                        <span style={{ fontSize: '0.75rem', fontWeight: 700, padding: '2px 10px', borderRadius: 20, background: statusColor.bg, border: `1px solid ${statusColor.border}`, color: statusColor.text }}>
+                          {order.status}
+                        </span>
+                      </div>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+                        <span style={{ fontWeight: 800, fontSize: '1rem', color: 'var(--color-ink)' }}>
+                          {order.currency} {order.totalAmount.toLocaleString()}
+                        </span>
+                        <span style={{ fontSize: '0.8rem', color: '#9ca3af' }}>
+                          {new Date(order.createdAt).toLocaleDateString('en-UG', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Books in order */}
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                      {order.books.map((b) => (
+                        <div key={b._id} style={{ display: 'flex', alignItems: 'center', gap: 8, background: '#f9fafb', border: '1px solid #e5e7eb', borderRadius: 8, padding: '6px 10px' }}>
+                          {b.coverImageUrl && (
+                            <img src={b.coverImageUrl} alt={b.title} style={{ width: 32, height: 40, objectFit: 'cover', borderRadius: 4 }} />
+                          )}
+                          <div>
+                            <div style={{ fontSize: '0.82rem', fontWeight: 700, color: 'var(--color-ink)', lineHeight: 1.2 }}>{b.title}</div>
+                            <div style={{ fontSize: '0.72rem', color: '#6b7280' }}>{b.author}</div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+
+                    <div style={{ marginTop: 8, fontSize: '0.72rem', color: '#d1d5db', fontFamily: 'monospace' }}>
+                      ref: {order.transactionId}
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           )}
         </div>
