@@ -19,6 +19,7 @@ async function fetchBooks(): Promise<Book[]> {
     title: book.title,
     author: book.author,
     genre: (Array.isArray(book.genre) ? book.genre : (book.genre ? [book.genre] : ["Fiction"])) as Genre[],
+    courses: Array.isArray(book.courses) ? (book.courses as string[]) : [],
     price: book.priceUGX / UGX_RATE,
     rating: 5.0,
     blurb: book.description,

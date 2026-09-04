@@ -24,6 +24,7 @@ export async function GET() {
       title: book.title,
       author: book.author,
       genre: Array.isArray(book.genre) ? book.genre : (book.genre ? [book.genre] : ["Fiction"]),
+      courses: Array.isArray(book.courses) ? book.courses : [],
       price: book.priceUGX / UGX_RATE,
       rating: 5.0,
       blurb: book.description,

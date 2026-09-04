@@ -24,6 +24,7 @@ export interface Book {
   title: string;
   author: string;
   genre: Genre[];
+  courses?: string[];
   price: number; // USD base price
   rating: number;
   blurb: string;

@@ -37,6 +37,7 @@ interface AdminBook {
   isAvailable: boolean;
   featured: boolean;
   genre: string[];
+  courses: string[];
 }
 
 interface EditState {
@@ -45,6 +46,7 @@ interface EditState {
   description: string;
   priceUGX: string;
   genre: string[];
+  courses: string;
 }
 
 export default function AdminClient() {
@@ -64,7 +66,8 @@ export default function AdminClient() {
   const [loadingBooks, setLoadingBooks] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [uploadGenres, setUploadGenres] = useState<string[]>(["Fiction"]);
-  const [editState, setEditState] = useState<EditState>({ title: "", author: "", description: "", priceUGX: "", genre: ["Fiction"] });
+  const [uploadCourses, setUploadCourses] = useState("");
+  const [editState, setEditState] = useState<EditState>({ title: "", author: "", description: "", priceUGX: "", genre: ["Fiction"], courses: "" });
   const [savingId, setSavingId] = useState<string | null>(null);
   const [editCoverFile, setEditCoverFile] = useState<File | null>(null);
   const [editCoverPreview, setEditCoverPreview] = useState<string | null>(null);
@@ -163,6 +166,7 @@ export default function AdminClient() {
           description,
           priceUGX: Number(priceUGX),
           genre: uploadGenres,
+          courses: uploadCourses.split(",").map(c => c.trim()).filter(Boolean),
           fileStorageKey: pdfKey,
           coverStorageKey: coverKey,
         }),
@@ -176,6 +180,7 @@ export default function AdminClient() {
       setSelectedCover(null);
       setSelectedFile(null);
       setUploadGenres(["Fiction"]);
+      setUploadCourses("");
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : "Upload failed — please try again.";
       setUploadMsg({ type: "error", text: msg });
@@ -195,6 +200,7 @@ export default function AdminClient() {
       description: book.description,
       priceUGX: String(book.priceUGX),
       genre: Array.isArray(book.genre) ? book.genre : (book.genre ? [book.genre] : ["Fiction"]),
+      courses: Array.isArray(book.courses) ? book.courses.join(", ") : "",
     });
   }
 
@@ -215,7 +221,11 @@ export default function AdminClient() {
         res = await fetch(`/api/admin/books/${id}`, {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ ...editState, priceUGX: Number(editState.priceUGX) }),
+          body: JSON.stringify({
+            ...editState,
+            priceUGX: Number(editState.priceUGX),
+            courses: editState.courses.split(",").map(c => c.trim()).filter(Boolean),
+          }),
         });
       }
       if (res.ok) {
@@ -357,6 +367,21 @@ export default function AdminClient() {
                   })}
                 </div>
               </div>
+            </div>
+
+            <div className={styles.formGroup}>
+              <label htmlFor="uploadCourses">Related Courses (Optional)</label>
+              <div className={styles.inputWrapper}>
+                <Tag className={styles.inputIcon} size={20} />
+                <input
+                  type="text"
+                  id="uploadCourses"
+                  placeholder="e.g. CIS 101, Web Development, Data Structures"
+                  value={uploadCourses}
+                  onChange={e => setUploadCourses(e.target.value)}
+                />
+              </div>
+              <p className={styles.helpText}>Separate multiple courses with commas. Students can search by course name.</p>
             </div>
 
             <div className={styles.fileRow}>
@@ -540,6 +565,17 @@ export default function AdminClient() {
                             })}
                           </div>
                         </div>
+                        <div style={{ marginTop: 12 }}>
+                          <label style={{ fontSize: "0.85rem", fontWeight: 600, color: "var(--color-ink-muted)", marginBottom: 4, display: "block" }}>
+                            Related Courses (comma-separated)
+                          </label>
+                          <input
+                            value={editState.courses}
+                            onChange={e => setEditState(s => ({ ...s, courses: e.target.value }))}
+                            placeholder="e.g. CIS 101, Web Dev"
+                            className={styles.editInput}
+                          />
+                        </div>
                       </div>
                     ) : (
                       <>
@@ -553,6 +589,11 @@ export default function AdminClient() {
                         </div>
                         {book.description && (
                           <div className={styles.bookBlurb}>{book.description.slice(0, 100)}{book.description.length > 100 ? "…" : ""}</div>
+                        )}
+                        {book.courses && book.courses.length > 0 && (
+                          <div style={{ fontSize: "0.78rem", color: "#6b7280", marginTop: 4 }}>
+                            📚 {book.courses.join(" · ")}
+                          </div>
                         )}
                       </>
                     )}

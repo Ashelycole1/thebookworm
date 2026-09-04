@@ -63,7 +63,8 @@ export default function HomeClient({ initialBooks, initialBookId }: HomeClientPr
       const queryOk =
         !q ||
         b.title.toLowerCase().includes(q) ||
-        b.author.toLowerCase().includes(q);
+        b.author.toLowerCase().includes(q) ||
+        (b.courses ?? []).some((c) => c.toLowerCase().includes(q));
       return genreOk && queryOk;
     });
   }, [books, genre, query]);

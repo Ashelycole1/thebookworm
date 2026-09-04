@@ -13,6 +13,7 @@ export interface IBook extends Document {
   coverImageUrl: string;
   fileStorageKey: string; // Private: excluded by default in queries
   genre: string[];
+  courses: string[];
   isAvailable: boolean;
   featured: boolean;
   createdAt: Date;
@@ -47,6 +48,10 @@ const BookSchema = new Schema<IBook>(
     genre: {
       type: [String],
       default: ["Fiction"],
+    },
+    courses: {
+      type: [String],
+      default: [],
     },
     fileStorageKey: {
       type: String,

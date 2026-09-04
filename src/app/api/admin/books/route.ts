@@ -42,7 +42,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   if (!userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   try {
     const body = await req.json();
-    const { title, author, description, priceUGX, genre, fileStorageKey, coverStorageKey } = body;
+    const { title, author, description, priceUGX, genre, courses, fileStorageKey, coverStorageKey } = body;
 
     if (!title || !author || !priceUGX || !fileStorageKey || !coverStorageKey) {
       return NextResponse.json(
@@ -71,6 +71,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       coverImageUrl,
       fileStorageKey,
       genre: Array.isArray(genre) && genre.length > 0 ? genre : ["Fiction"],
+      courses: Array.isArray(courses) ? courses : [],
     });
 
     return NextResponse.json(
