@@ -4,7 +4,7 @@ import { GetObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import connectDB from "@/lib/db";
 import Book from "@/models/Book";
-import { r2 } from "@/lib/r2";
+import { getR2 } from "@/lib/r2";
 
 export async function GET(
   request: NextRequest,
@@ -29,8 +29,11 @@ export async function GET(
       Key: book.fileStorageKey,
     });
 
+    const client = getR2();
+    if (!client) return NextResponse.json({ error: "R2 credentials are not configured on the server." }, { status: 500 });
+
     // Generate a presigned URL valid for 24 hours so admin can send it easily
-    const url = await getSignedUrl(r2, command, { expiresIn: 86400 });
+    const url = await getSignedUrl(client, command, { expiresIn: 86400 });
 
     return NextResponse.json({ url });
   } catch (error) {

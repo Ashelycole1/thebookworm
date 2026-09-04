@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { HeadBucketCommand, ListObjectsV2Command } from "@aws-sdk/client-s3";
 import connectDB from "@/lib/db";
-import { r2 } from "@/lib/r2";
+import { getR2 } from "@/lib/r2";
 import Book from "@/models/Book";
 
 /**
@@ -42,11 +42,13 @@ export async function GET() {
   // ── 2. Cloudflare R2 ─────────────────────────────────────────────────────
   const bucket = process.env.R2_BUCKET_NAME ?? "(R2_BUCKET_NAME not set)";
   try {
+    const client = getR2();
+    if (!client) throw new Error("R2 credentials not configured");
     // HeadBucket confirms the bucket exists and credentials are valid
-    await r2.send(new HeadBucketCommand({ Bucket: bucket }));
+    await client.send(new HeadBucketCommand({ Bucket: bucket }));
 
     // List up to 5 objects to show the bucket is accessible
-    const list = await r2.send(
+    const list = await client.send(
       new ListObjectsV2Command({ Bucket: bucket, MaxKeys: 5 })
     );
 

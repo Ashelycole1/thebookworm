@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { GetObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
-import { r2 } from "@/lib/r2";
+import { getR2 } from "@/lib/r2";
 
 /**
  * GET /api/cover?key=books/public/...
@@ -17,13 +17,18 @@ export async function GET(req: NextRequest) {
   }
 
   try {
+    const client = getR2();
+    if (!client) {
+      return NextResponse.json({ error: "R2 credentials are not configured on the server." }, { status: 500 });
+    }
+
     const command = new GetObjectCommand({
       Bucket: process.env.R2_BUCKET_NAME,
       Key: key,
     });
 
     // Presigned URL valid for 1 hour
-    const url = await getSignedUrl(r2, command, { expiresIn: 3600 });
+    const url = await getSignedUrl(client, command, { expiresIn: 3600 });
 
     // Redirect the browser to the presigned URL
     return NextResponse.redirect(url);

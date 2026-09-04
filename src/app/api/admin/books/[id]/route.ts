@@ -3,7 +3,7 @@ import { auth } from "@clerk/nextjs/server";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import connectDB from "@/lib/db";
 import Book from "@/models/Book";
-import { r2 } from "@/lib/r2";
+import { getR2 } from "@/lib/r2";
 
 /**
  * PATCH /api/admin/books/[id]
@@ -46,7 +46,12 @@ export async function PATCH(
         const sanitized = coverFile.name.replace(/[^a-zA-Z0-9.\-]/g, "_");
         const coverKey = `books/public/${Date.now()}-${sanitized}`;
 
-        await r2.send(new PutObjectCommand({
+        const client = getR2();
+        if (!client) {
+          return NextResponse.json({ error: "R2 credentials are not configured on the server." }, { status: 500 });
+        }
+
+        await client.send(new PutObjectCommand({
           Bucket: process.env.R2_BUCKET_NAME,
           Key: coverKey,
           Body: coverBuffer,

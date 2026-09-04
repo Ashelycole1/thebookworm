@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { GetObjectCommand } from "@aws-sdk/client-s3";
-import { r2 } from "@/lib/r2";
+import { getR2 } from "@/lib/r2";
 import connectDB from "@/lib/db";
 import Book from "@/models/Book";
 
@@ -59,7 +59,12 @@ export async function GET(req: NextRequest) {
       Key: r2Key,
     });
 
-    const response = await r2.send(command);
+    const client = getR2();
+    if (!client) {
+      return NextResponse.json({ error: "R2 credentials are not configured on the server." }, { status: 500 });
+    }
+
+    const response = await client.send(command);
 
     if (!response.Body) {
       return NextResponse.json({ error: "No image body" }, { status: 500 });
