@@ -332,7 +332,7 @@ export default function AdminClient() {
                 </div>
               </div>
               <div className={styles.formGroup} style={{ gridColumn: "1 / -1" }}>
-                <label>Genres (Select up to 3)</label>
+                <label>Genres (Select up to 5)</label>
                 <div className={styles.genreGrid}>
                   {GENRES.map(g => {
                     if (g === "All") return null;
@@ -343,7 +343,7 @@ export default function AdminClient() {
                           checked={uploadGenres.includes(g)}
                           onChange={(e) => {
                             if (e.target.checked) {
-                              if (uploadGenres.length < 3) {
+                              if (uploadGenres.length < 5) {
                                 setUploadGenres([...uploadGenres, g]);
                               }
                             } else {
@@ -514,7 +514,7 @@ export default function AdminClient() {
                         />
                         <div style={{ marginTop: 12 }}>
                           <label style={{ fontSize: "0.85rem", fontWeight: 600, color: "var(--color-ink-muted)", marginBottom: 8, display: "block" }}>
-                            Genres (Select up to 3)
+                            Genres (Select up to 5)
                           </label>
                           <div className={styles.genreGrid}>
                             {GENRES.map(g => {
@@ -526,7 +526,7 @@ export default function AdminClient() {
                                     checked={editState.genre.includes(g)}
                                     onChange={(e) => {
                                       if (e.target.checked) {
-                                        if (editState.genre.length < 3) {
+                                        if (editState.genre.length < 5) {
                                           setEditState(s => ({ ...s, genre: [...s.genre, g] }));
                                         }
                                       } else {
