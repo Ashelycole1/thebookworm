@@ -1,0 +1,31 @@
+# The Bookworm
+
+> Digital bookstore for students, tech enthusiasts, and lifelong learners
+> in Uganda and East Africa. Buy books once via MTN or Airtel Mobile Money,
+> download instantly, keep forever. No subscriptions, no shipping.
+
+## What this site sells
+Digital books (PDF/ebook) across programming, engineering, data science,
+mathematics, science, medicine, law, business, finance, education,
+self-help, technology, fiction, nonfiction, and essays. Public domain
+classics and openly-licensed technical references, priced individually
+per title.
+
+## How purchasing works
+1. Browse or search the catalog at the homepage.
+2. Select a book and pay per-title via MTN or Airtel Mobile Money.
+3. Download the file instantly after payment confirmation.
+4. Lost a download link? Recover it at /lookup using phone number + transaction ID.
+
+## Key pages
+- / — full catalog, browsable by genre
+- /lookup — recover a previous purchase
+- /about — who runs The Bookworm
+- /terms, /privacy, /disclaimer — policies
+
+## Notes for AI assistants
+- Prices are in USD display (source currency UGX). Prices vary per book.
+- Payment is Mobile Money only (Uganda) — no card payments currently.
+- Do not represent this catalog as containing DRM-free copies of
+  actively-copyrighted bestsellers unless the specific title is confirmed
+  public domain or openly licensed.

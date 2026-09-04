@@ -1,14 +1,12 @@
-import { MetadataRoute } from 'next'
+import type { MetadataRoute } from "next";
+
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://the-book-worm.app";
 
 export default function robots(): MetadataRoute.Robots {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'
-
   return {
-    rules: {
-      userAgent: '*',
-      allow: '/',
-      disallow: ['/admin', '/api/admin/'],
-    },
-    sitemap: `${baseUrl}/sitemap.xml`,
-  }
+    rules: [
+      { userAgent: "*", allow: "/", disallow: ["/keep-forever", "/api/"] },
+    ],
+    sitemap: `${SITE_URL}/sitemap.xml`,
+  };
 }
