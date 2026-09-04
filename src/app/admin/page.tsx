@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./admin.module.css";
 import { Upload, Book, FileText, ImageIcon, DollarSign, Tag, Pencil, Trash2, ToggleLeft, ToggleRight, Check, X, Link, Star } from "lucide-react";
@@ -49,6 +49,9 @@ export default function AdminPage() {
   const [tab, setTab] = useState<"upload" | "manage">("upload");
   const router = useRouter();
 
+  const [searchQuery, setSearchQuery] = useState("");
+  const [adminActive, setAdminActive] = useState(false);
+
   useEffect(() => {
     try {
       const ok = sessionStorage.getItem("allowAdmin");
@@ -56,12 +59,15 @@ export default function AdminPage() {
         router.replace("/");
         return;
       }
-      // clear the flag so back/refresh requires clicking again
-      sessionStorage.removeItem("allowAdmin");
+      // show Manage tab when arriving via the footer link and persist the admin session
+      setTab("manage");
+      setAdminActive(true);
     } catch (e) {
       router.replace("/");
     }
   }, [router]);
+
+  
 
   // --- Upload state ---
   const [uploading, setUploading] = useState(false);
@@ -92,9 +98,28 @@ export default function AdminPage() {
     }
   }, []);
 
+  // Persist admin session across refreshes while `adminActive` is true
+  useEffect(() => {
+    try {
+      if (adminActive) sessionStorage.setItem("allowAdmin", "1");
+      else sessionStorage.removeItem("allowAdmin");
+    } catch (e) {}
+  }, [adminActive]);
+
   useEffect(() => {
     if (tab === "manage") fetchBooks();
   }, [tab, fetchBooks]);
+
+  const filteredBooks = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
+    if (!q) return books;
+    return books.filter((b) => {
+      const title = (b.title || "").toLowerCase();
+      const author = (b.author || "").toLowerCase();
+      const genres = (Array.isArray(b.genre) ? b.genre : [b.genre]).join(" ").toLowerCase();
+      return title.includes(q) || author.includes(q) || genres.includes(q);
+    });
+  }, [books, searchQuery]);
 
   // --- Upload handler ---
   async function handleUpload(e: React.FormEvent<HTMLFormElement>) {
@@ -288,6 +313,11 @@ export default function AdminPage() {
         <button className={`${styles.tab} ${tab === "manage" ? styles.tabActive : ""}`} onClick={() => setTab("manage")}>
           <Book size={16} /> Manage Books
         </button>
+        <div style={{ marginLeft: 'auto', display: 'flex', gap: 8 }}>
+          {adminActive ? (
+            <button className={styles.refreshBtn} onClick={() => { setAdminActive(false); router.replace('/'); }} title="Exit admin">Exit Admin</button>
+          ) : null}
+        </div>
       </div>
 
       {/* ─── UPLOAD TAB ─────────────────────────────────── */}
@@ -427,13 +457,29 @@ export default function AdminPage() {
             </div>
           </div>
 
+          {/* Search row */}
+          {tab === "manage" && (
+            <div className={styles.searchRow} style={{ display: 'flex', justifyContent: 'center', margin: '18px 0' }}>
+              <div style={{ maxWidth: 560, width: '100%', display: 'flex', gap: 8 }}>
+                <input
+                  className={styles.searchInput}
+                  placeholder="Search by title, author, or genre..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onKeyDown={(e) => { if (e.key === 'Enter') e.currentTarget.blur(); }}
+                />
+                <button className={styles.refreshBtn} onClick={() => setSearchQuery("")}>Clear</button>
+              </div>
+            </div>
+          )}
+
           {loadingBooks ? (
             <div className={styles.loadingMsg}>Loading books...</div>
-          ) : books.length === 0 ? (
+          ) : filteredBooks.length === 0 ? (
             <div className={styles.loadingMsg}>No books found. Upload one first!</div>
           ) : (
             <div className={styles.bookList}>
-              {books.map((book) => (
+              {filteredBooks.map((book) => (
                 <div key={book._id} className={`${styles.bookRow} ${!book.isAvailable ? styles.bookRowDisabled : ""}`}>
                   {/* Cover thumbnail — clickable in edit mode */}
                   <div className={styles.bookThumb} style={editingId === book._id ? { cursor: "pointer", position: "relative" } : {}}>
