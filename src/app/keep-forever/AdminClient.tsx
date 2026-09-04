@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import styles from "./admin.module.css";
-import { Upload, Book, FileText, ImageIcon, DollarSign, Tag, Pencil, Trash2, ToggleLeft, ToggleRight, Check, X, Link, Star } from "lucide-react";
+import { Upload, Book, FileText, ImageIcon, DollarSign, Tag, Pencil, Trash2, ToggleLeft, ToggleRight, Check, X, Link, Star, ShoppingCart } from "lucide-react";
 import { useClerk } from "@clerk/nextjs";
 import ClerkProviderWrapper from "@/components/ClerkProviderWrapper";
 
@@ -50,7 +50,7 @@ interface EditState {
 }
 
 export default function AdminClient() {
-  const [tab, setTab] = useState<"upload" | "manage">("manage");
+  const [tab, setTab] = useState<"upload" | "manage" | "orders">("manage");
   const router = useRouter();
 
   const [searchQuery, setSearchQuery] = useState("");
@@ -72,6 +72,37 @@ export default function AdminClient() {
   const [editCoverFile, setEditCoverFile] = useState<File | null>(null);
   const [editCoverPreview, setEditCoverPreview] = useState<string | null>(null);
 
+  // --- Orders state ---
+  interface OrderBook { _id: string; title: string; author: string; coverImageUrl?: string; priceUGX: number; }
+  interface AdminOrder {
+    _id: string;
+    transactionId: string;
+    phoneNumber: string;
+    status: "PENDING" | "SUCCESSFUL" | "FAILED";
+    totalAmount: number;
+    currency: string;
+    books: OrderBook[];
+    createdAt: string;
+  }
+  const [orders, setOrders] = useState<AdminOrder[]>([]);
+  const [loadingOrders, setLoadingOrders] = useState(false);
+
+  const fetchOrders = useCallback(async () => {
+    setLoadingOrders(true);
+    try {
+      const res = await fetch("/api/admin/orders");
+      const data = await res.json();
+      setOrders(Array.isArray(data) ? data : []);
+    } catch {
+      console.error("Failed to load orders");
+    } finally {
+      setLoadingOrders(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (tab === "orders") fetchOrders();
+  }, [tab, fetchOrders]);
   const { signOut } = useClerk();
 
   const fetchBooks = useCallback(async () => {
