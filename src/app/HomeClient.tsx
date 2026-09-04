@@ -244,7 +244,7 @@ export default function HomeClient({ initialBooks, initialBookId }: HomeClientPr
               </div>
             </div>
             <span className="footer-value-prop">
-              Pay once via Mobile Money &bull; Download instantly &bull; <Link href="/admin" style={{ color: 'inherit', textDecoration: 'none', cursor: 'pointer' }}>Keep forever.</Link>
+              Pay once via Mobile Money &bull; Download instantly &bull; <Link href="/keep-forever" style={{ color: 'inherit', textDecoration: 'none', cursor: 'pointer' }}>Keep forever.</Link>
             </span>
           </div>
           <div className="footer-bottom">

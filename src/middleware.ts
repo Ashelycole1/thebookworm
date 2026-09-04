@@ -4,7 +4,7 @@ export default clerkMiddleware();
 
 export const config = {
   matcher: [
-    '/admin(.*)',
+    '/keep-forever(.*)',
     '/api/admin(.*)',
     '/sign-in(.*)'
   ],
