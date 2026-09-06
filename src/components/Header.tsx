@@ -53,7 +53,6 @@ export default function Header({
         <nav className="header-nav" aria-label="Primary navigation">
           <ul className="nav-list">
             <li><Link href="/lookup" className="nav-link">Lookup</Link></li>
-            <li><Link href="/about" className="nav-link">About Us</Link></li>
             <li><Link href="/terms" className="nav-link">Terms</Link></li>
           </ul>
         </nav>
@@ -115,9 +114,6 @@ export default function Header({
               <div className="mobile-menu-panel" role="menu" aria-label="Mobile navigation">
                 <Link href="/lookup" className="mobile-menu-link" onClick={() => setMobileMenuOpen(false)}>
                   Lookup
-                </Link>
-                <Link href="/about" className="mobile-menu-link" onClick={() => setMobileMenuOpen(false)}>
-                  About Us
                 </Link>
                 <Link href="/terms" className="mobile-menu-link" onClick={() => setMobileMenuOpen(false)}>
                   Terms

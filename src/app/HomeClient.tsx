@@ -258,9 +258,6 @@ export default function HomeClient({ initialBooks, initialBookId }: HomeClientPr
               <Link href="/privacy">Privacy Policy</Link>
               <Link href="/disclaimer">Disclaimers</Link>
             </div>
-            <span className="footer-credit">
-              Made by <a href="https://www.linkedin.com/company/renoa-collective/" target="_blank" rel="noopener noreferrer">RENOA</a>
-            </span>
           </div>
         </div>
       </footer>

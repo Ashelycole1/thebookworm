@@ -28,7 +28,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: "daily",
       priority: 1.0,
     },
-    // We can add other static pages here if they exist, e.g., /about, /lookup
+    // We can add other static pages here if they exist, e.g., /lookup
   ];
 
   return [...staticEntries, ...bookEntries];
