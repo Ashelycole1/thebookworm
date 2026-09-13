@@ -90,8 +90,7 @@ export default function RootLayout({
               (function() {
                 try {
                   const storedTheme = localStorage.getItem('bookworm-theme');
-                  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-                  const theme = storedTheme || (prefersDark ? 'dark' : 'light');
+                  const theme = storedTheme === 'dark' ? 'dark' : 'light';
                   const root = document.documentElement;
                   root.setAttribute('data-theme', theme);
                   root.style.colorScheme = theme;
