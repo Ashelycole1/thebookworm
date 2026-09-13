@@ -74,7 +74,6 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: "#E8B930",
-  colorScheme: "light",
 };
 
 export default function RootLayout({
@@ -83,8 +82,24 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className={manrope.className}>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  const storedTheme = localStorage.getItem('bookworm-theme');
+                  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                  const theme = storedTheme || (prefersDark ? 'dark' : 'light');
+                  const root = document.documentElement;
+                  root.setAttribute('data-theme', theme);
+                  root.style.colorScheme = theme;
+                } catch (e) {}
+              })();
+            `,
+          }}
+        />
         <PwaRegister />
         <Suspense fallback={null}>
           <ScrollToTop />

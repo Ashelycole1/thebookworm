@@ -2,8 +2,8 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Menu, Search, ShoppingBag, X } from "lucide-react";
-import { useState } from "react";
+import { Menu, MoonStar, Search, ShoppingBag, SunMedium, X } from "lucide-react";
+import { useEffect, useState } from "react";
 import { normalizeWhatsAppLink } from "@/lib/whatsapp";
 
 interface HeaderProps {
@@ -24,6 +24,22 @@ export default function Header({
   onQueryChange,
 }: HeaderProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [darkMode, setDarkMode] = useState(false);
+
+  useEffect(() => {
+    const storedTheme = window.localStorage.getItem("bookworm-theme");
+    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    const initialDarkMode = storedTheme ? storedTheme === "dark" : prefersDark;
+    setDarkMode(initialDarkMode);
+  }, []);
+
+  useEffect(() => {
+    const root = document.documentElement;
+    const theme = darkMode ? "dark" : "light";
+    root.setAttribute("data-theme", theme);
+    root.style.colorScheme = theme;
+    window.localStorage.setItem("bookworm-theme", theme);
+  }, [darkMode]);
 
   const whatsappLink = normalizeWhatsAppLink(
     process.env.NEXT_PUBLIC_WHATSAPP_LINK ??
@@ -69,6 +85,17 @@ export default function Header({
             <img src="/whatsapp.svg" alt="WhatsApp" width={18} height={18} />
             <span className="whatsapp-label">Join</span>
           </a>
+
+          <button
+            type="button"
+            className="header-theme-toggle"
+            onClick={() => setDarkMode((value) => !value)}
+            aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"}
+            title={darkMode ? "Switch to light mode" : "Switch to dark mode"}
+          >
+            {darkMode ? <SunMedium size={17} strokeWidth={2} /> : <MoonStar size={17} strokeWidth={2} />}
+          </button>
+
           <div className={`header-search-wrap${searchOpen ? ' open' : ''}`}>
             {searchOpen && (
               <input

@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowLeft, Search, CheckCircle } from "lucide-react";
+import ThemeToggle from "@/components/ThemeToggle";
 import { normalizeWhatsAppLink } from "@/lib/whatsapp";
 
 interface Download {
@@ -55,14 +56,17 @@ export default function OrderLookupPage() {
     <div style={{ minHeight: "100vh", backgroundColor: "var(--color-bg)", paddingBottom: 64 }}>
       {/* Simple header */}
       <header className="site-header" style={{ padding: "16px 24px" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-          <Link href="/" className="icon-circle" aria-label="Go back home">
-            <ArrowLeft size={18} />
-          </Link>
-          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            <Image src="/logo-icon.png" alt="Logo" width={24} height={24} />
-            <span style={{ fontWeight: 800, fontSize: "1rem" }}>The Bookworm</span>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+            <Link href="/" className="icon-circle" aria-label="Go back home">
+              <ArrowLeft size={18} />
+            </Link>
+            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+              <Image src="/logo-icon.png" alt="Logo" width={24} height={24} />
+              <span style={{ fontWeight: 800, fontSize: "1rem" }}>The Bookworm</span>
+            </div>
           </div>
+          <ThemeToggle />
         </div>
       </header>
 
